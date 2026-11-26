@@ -1,13 +1,16 @@
 <script setup>
 import { computed, ref } from 'vue'
 import { content, site } from '../content.js'
-import Launcher from '../components/Launcher.vue'
+import FeatureHero from '../components/FeatureHero.vue'
+import AddonRow from '../components/AddonRow.vue'
 import GalleryRows from '../components/GalleryRows.vue'
 import Hotbar from '../components/Hotbar.vue'
 import SectionHead from '../components/SectionHead.vue'
 import VideoModal from '../components/VideoModal.vue'
 
 const premium = content.premium
+const featured = premium.find((a) => a.featured) || premium[0]
+const others = premium.filter((a) => a !== featured)
 const free = content.free
 const trailer = ref(null) // addon cujo trailer está aberto
 
@@ -23,9 +26,14 @@ const shots = computed(() => gallery.length)
 </script>
 
 <template>
-  <div id="premium">
-    <Launcher :addons="premium" @trailer="trailer = $event" />
-  </div>
+  <FeatureHero :addon="featured" @trailer="trailer = $event" />
+
+  <section v-if="others.length" id="premium" class="wrap premium" aria-labelledby="premium-title">
+    <SectionHead id="premium-title">Premium Add-ons</SectionHead>
+    <div class="premium__list">
+      <AddonRow v-for="(a, n) in others" :key="a.slug" v-reveal :addon="a" :flip="n % 2 === 1" />
+    </div>
+  </section>
 
   <section v-if="gallery.length" id="gallery" class="gallery" aria-labelledby="gallery-title">
     <div class="wrap">
@@ -53,9 +61,15 @@ const shots = computed(() => gallery.length)
 </template>
 
 <style scoped>
+.premium,
 .gallery,
 .free {
   padding-top: clamp(64px, 8vw, 110px);
+}
+
+.premium__list {
+  display: grid;
+  gap: clamp(14px, 2vw, 24px);
 }
 
 .lead {

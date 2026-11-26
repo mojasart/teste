@@ -13,7 +13,6 @@ const trailer = ref('')
 const addon = computed(() => findAddon(route.params.slug))
 const others = computed(() => content.premium.filter((x) => x.slug !== addon.value.slug))
 const body = computed(() => paragraphs(addon.value.description))
-const status = computed(() => (addon.value.marketplace ? 'Available on the Marketplace' : addon.value.badge || 'Premium add-on'))
 </script>
 
 <template>
@@ -34,15 +33,11 @@ const status = computed(() => (addon.value.marketplace ? 'Available on the Marke
         <span class="banner__corner banner__corner--br" aria-hidden="true"></span>
       </header>
 
-      <div class="detail">
+      <div class="detail" :class="{ 'detail--solo': !addon.trailer }">
         <div class="detail__main">
           <p class="detail__tag">{{ addon.tagline }}</p>
           <p v-for="(p, n) in body" :key="n" class="detail__p">{{ p }}</p>
           <div class="detail__actions">
-            <button v-if="addon.trailer" type="button" class="btn btn--accent" @click="trailer = addon.trailer">
-              <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor" /></svg>
-              Watch Trailer
-            </button>
             <a v-if="addon.marketplace" :href="addon.marketplace" target="_blank" rel="noopener" class="btn btn--light">Get it on the Marketplace</a>
             <a v-if="addon.gallery.length" href="#addon-gallery" class="detail__link">
               View Gallery
@@ -51,12 +46,13 @@ const status = computed(() => (addon.value.marketplace ? 'Available on the Marke
           </div>
         </div>
 
-        <dl class="facts">
-          <div><dt>Type</dt><dd>Premium add-on</dd></div>
-          <div><dt>Platform</dt><dd>Minecraft: Bedrock Edition</dd></div>
-          <div><dt>Status</dt><dd>{{ status }}</dd></div>
-          <div v-if="addon.gallery.length"><dt>Screenshots</dt><dd>{{ addon.gallery.length }}</dd></div>
-        </dl>
+        <button v-if="addon.trailer" type="button" class="teaser" @click="trailer = addon.trailer">
+          <img :src="addon.gallery[1]?.src || addon.keyart" alt="" loading="lazy" />
+          <span class="teaser__play" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M8 5l12 7-12 7z" /></svg>
+          </span>
+          <span class="teaser__label">Watch the {{ addon.title }} trailer</span>
+        </button>
       </div>
 
       <section v-if="addon.gallery.length" id="addon-gallery" class="block" aria-labelledby="g-title">
@@ -185,7 +181,7 @@ const status = computed(() => (addon.value.marketplace ? 'Available on the Marke
 /* ---------- texto + ficha ---------- */
 .detail {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.8fr);
   gap: 28px clamp(32px, 5vw, 72px);
   align-items: start;
   padding-top: clamp(28px, 4vw, 48px);
@@ -227,35 +223,85 @@ const status = computed(() => (addon.value.marketplace ? 'Available on the Marke
   text-decoration-thickness: 2px;
 }
 
-.facts {
+.detail--solo {
+  grid-template-columns: 1fr;
+}
+
+/* prévia do trailer: imagem do addon com botão de play */
+.teaser {
+  position: relative;
+  font: inherit;
   display: grid;
-  gap: 0;
-  margin: 0;
-  background: var(--bg-2);
-  border: 1px solid var(--panel-hi);
-  border-top: 4px solid var(--tint);
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  overflow: hidden;
+  color: var(--hi);
+  background: var(--panel);
+  border: 0;
   border-radius: 4px;
+  cursor: pointer;
+  isolation: isolate;
 }
 
-.facts div {
+.teaser img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.teaser::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgb(20 15 28 / 0.45);
+  transition: background-color 300ms ease;
+}
+
+.teaser:hover img {
+  transform: scale(1.05);
+}
+
+.teaser:hover::after {
+  background: rgb(20 15 28 / 0.25);
+}
+
+.teaser__play {
   display: grid;
-  gap: 2px;
-  padding: 14px 18px;
-  border-bottom: 1px solid var(--panel);
+  place-items: center;
+  width: 74px;
+  height: 74px;
+  background: var(--tint);
+  border-radius: 50%;
+  box-shadow: 0 0 0 8px rgb(255 255 255 / 0.15);
+  transition: transform 250ms cubic-bezier(0.3, 1.6, 0.5, 1), box-shadow 250ms ease;
 }
 
-.facts div:last-child {
-  border-bottom: 0;
+.teaser:hover .teaser__play {
+  transform: scale(1.1);
+  box-shadow: 0 0 0 14px rgb(255 255 255 / 0.12);
 }
 
-.facts dt {
-  font-size: 0.8rem;
-  color: var(--mid);
+.teaser__play svg {
+  width: 30px;
+  height: 30px;
+  margin-left: 4px;
+  fill: #1c1527;
 }
 
-.facts dd {
-  margin: 0;
+.teaser__label {
+  position: absolute;
+  left: 14px;
+  bottom: 12px;
   font-weight: 600;
+  font-size: var(--step--1);
+  text-shadow: 0 1px 8px rgb(0 0 0 / 0.8);
 }
 
 .block {
