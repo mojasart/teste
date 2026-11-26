@@ -25,17 +25,17 @@ async function submit() {
 <template>
   <section class="contact wrap">
     <div class="contact__intro">
-      <h1 class="contact__title">Contato</h1>
-      <p>Parcerias, projetos sob encomenda, imprensa ou dúvidas sobre algum addon: mande uma mensagem e respondemos por e-mail.</p>
+      <h1 class="contact__title">Contact</h1>
+      <p>Partnerships, custom projects, press or questions about one of our add-ons: send us a message and we will reply by email.</p>
       <p v-if="site.settings?.contact_email">
-        Prefere e-mail direto? <a :href="`mailto:${site.settings.contact_email}`">{{ site.settings.contact_email }}</a>
+        Prefer email? <a :href="`mailto:${site.settings.contact_email}`">{{ site.settings.contact_email }}</a>
       </p>
     </div>
 
     <div v-if="status === 'sent'" class="sent">
       <div class="sent__inner">
-        <h2>Mensagem enviada.</h2>
-        <p>Respondemos no e-mail {{ form.email }}.</p>
+        <h2>Message sent.</h2>
+        <p>We will reply to {{ form.email }}.</p>
       </div>
     </div>
 
@@ -43,36 +43,36 @@ async function submit() {
       <p v-if="error" class="notice notice--error" role="alert">{{ error }}</p>
 
       <label class="field">
-        <span>Nome</span>
+        <span>Name</span>
         <input v-model="form.name" class="input" autocomplete="name" required :aria-invalid="!!errors.name" />
         <small v-if="errors.name" class="error">{{ errors.name }}</small>
       </label>
 
       <label class="field">
-        <span>E-mail</span>
+        <span>Email</span>
         <input v-model="form.email" class="input" type="email" autocomplete="email" required :aria-invalid="!!errors.email" />
         <small v-if="errors.email" class="error">{{ errors.email }}</small>
       </label>
 
       <label class="field">
-        <span>Assunto <small>(opcional)</small></span>
+        <span>Subject <small>(optional)</small></span>
         <input v-model="form.subject" class="input" :aria-invalid="!!errors.subject" />
         <small v-if="errors.subject" class="error">{{ errors.subject }}</small>
       </label>
 
       <label class="field">
-        <span>Mensagem</span>
+        <span>Message</span>
         <textarea v-model="form.message" class="input" rows="6" required :aria-invalid="!!errors.message"></textarea>
         <small v-if="errors.message" class="error">{{ errors.message }}</small>
       </label>
 
       <!-- armadilha para robôs: pessoas não veem este campo -->
       <label class="visually-hidden" aria-hidden="true">
-        Site <input v-model="form.website" tabindex="-1" autocomplete="off" />
+        Website <input v-model="form.website" tabindex="-1" autocomplete="off" />
       </label>
 
       <button class="btn btn--purple" type="submit" :disabled="status === 'sending'">
-        {{ status === 'sending' ? 'Enviando…' : 'Enviar mensagem' }}
+        {{ status === 'sending' ? 'Sending…' : 'Send message' }}
       </button>
     </form>
   </section>

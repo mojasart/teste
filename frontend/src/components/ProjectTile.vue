@@ -7,7 +7,7 @@ defineProps({
 </script>
 
 <template>
-  <RouterLink :to="`/projetos/${project.slug}`" class="tile" :class="{ 'tile--big': big }" :style="{ '--accent': project.accent_color }">
+  <RouterLink :to="`/projects/${project.slug}`" class="tile" :class="{ 'tile--big': big }" :style="{ '--accent': project.accent_color }">
     <div class="tile__media">
       <img :src="project.cover_image || project.banner_image" alt="" loading="lazy" />
     </div>

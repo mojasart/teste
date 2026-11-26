@@ -8,16 +8,16 @@ const route = useRoute()
 watch(() => route.fullPath, () => (open.value = false))
 
 const links = [
-  { to: '/projetos', label: 'Projetos' },
-  { to: '/sobre', label: 'Sobre' },
-  { to: '/contato', label: 'Contato' },
+  { to: '/projects', label: 'Projects' },
+  { to: '/about', label: 'About' },
+  { to: '/contact', label: 'Contact' },
 ]
 </script>
 
 <template>
   <header class="header">
     <div class="wrap header__bar">
-      <RouterLink to="/" class="brand" aria-label="PurpleByte Studios, página inicial">
+      <RouterLink to="/" class="brand" aria-label="PurpleByte Studios home">
         <span class="brand__mark"><BrandMark /></span>
         <span class="brand__name">PurpleByte <span>Studios</span></span>
       </RouterLink>
@@ -29,14 +29,14 @@ const links = [
         aria-controls="menu-principal"
         @click="open = !open"
       >
-        <span class="visually-hidden">{{ open ? 'Fechar menu' : 'Abrir menu' }}</span>
+        <span class="visually-hidden">{{ open ? 'Close menu' : 'Open menu' }}</span>
         <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
           <path v-if="!open" d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="3" />
           <path v-else d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3" />
         </svg>
       </button>
 
-      <nav id="menu-principal" class="nav" :class="{ 'nav--open': open }" aria-label="Principal">
+      <nav id="menu-principal" class="nav" :class="{ 'nav--open': open }" aria-label="Main">
         <RouterLink v-for="l in links" :key="l.to" :to="l.to" class="nav__link">{{ l.label }}</RouterLink>
       </nav>
     </div>

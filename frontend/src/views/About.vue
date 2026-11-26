@@ -8,13 +8,15 @@ const body = computed(() => paragraphs(site.settings?.about_text))
 
 <template>
   <section class="about wrap">
-    <div class="about__mark" aria-hidden="true"><BrandMark gap="var(--night)" ink="var(--byte)" shade="var(--night-3)" /></div>
+    <div class="about__mark" aria-hidden="true">
+      <BrandMark gap="var(--night)" ink="var(--byte)" shade="var(--night-3)" />
+    </div>
     <div>
-      <h1 class="about__title">Sobre o estúdio</h1>
+      <h1 class="about__title">About the studio</h1>
       <div class="about__body">
         <p v-for="(p, i) in body" :key="i">{{ p }}</p>
       </div>
-      <RouterLink to="/contato" class="btn btn--purple">Falar com o estúdio</RouterLink>
+      <RouterLink to="/contact" class="btn btn--purple">Work with us</RouterLink>
     </div>
   </section>
 </template>

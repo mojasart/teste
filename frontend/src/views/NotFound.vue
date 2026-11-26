@@ -1,8 +1,8 @@
 <template>
   <section class="nf wrap">
-    <h1>Essa página não existe.</h1>
-    <p>O endereço pode ter mudado. Os projetos estão todos aqui:</p>
-    <RouterLink to="/projetos" class="btn">Ver projetos</RouterLink>
+    <h1>This page does not exist.</h1>
+    <p>The address may have changed. All our projects are here:</p>
+    <RouterLink to="/projects" class="btn">See our projects</RouterLink>
   </section>
 </template>
 
@@ -12,6 +12,7 @@
   justify-items: start;
   gap: 18px;
   padding-block: 96px;
+  color: var(--mid);
 }
 
 .nf h1 {

@@ -3,10 +3,10 @@ import { admin } from './api.js'
 
 const routes = [
   { path: '/', component: () => import('./views/Home.vue') },
-  { path: '/projetos', component: () => import('./views/Projects.vue'), meta: { title: 'Projetos' } },
-  { path: '/projetos/:slug', component: () => import('./views/Project.vue') },
-  { path: '/sobre', component: () => import('./views/About.vue'), meta: { title: 'Sobre' } },
-  { path: '/contato', component: () => import('./views/Contact.vue'), meta: { title: 'Contato' } },
+  { path: '/projects', component: () => import('./views/Projects.vue'), meta: { title: 'Projects' } },
+  { path: '/projects/:slug', component: () => import('./views/Project.vue') },
+  { path: '/about', component: () => import('./views/About.vue'), meta: { title: 'About' } },
+  { path: '/contact', component: () => import('./views/Contact.vue'), meta: { title: 'Contact' } },
   { path: '/admin/login', component: () => import('./views/admin/Login.vue'), meta: { admin: true, public: true, title: 'Entrar' } },
   {
     path: '/admin',
@@ -20,7 +20,7 @@ const routes = [
       { path: 'textos', component: () => import('./views/admin/AdminSettings.vue'), meta: { title: 'Textos e links' } },
     ],
   },
-  { path: '/:rest(.*)*', component: () => import('./views/NotFound.vue'), meta: { title: 'Página não encontrada' } },
+  { path: '/:rest(.*)*', component: () => import('./views/NotFound.vue'), meta: { title: 'Page not found' } },
 ]
 
 export const router = createRouter({

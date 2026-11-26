@@ -21,7 +21,7 @@ const duration = computed(() => `${Math.max(30, items.value.length * 3.2)}s`)
     <ul class="belt__track">
       <li v-for="(p, i) in items" :key="i" :aria-hidden="i >= items.length / 2">
         <RouterLink
-          :to="`/projetos/${p.slug}`"
+          :to="`/projects/${p.slug}`"
           class="belt__item"
           :tabindex="i >= items.length / 2 ? -1 : undefined"
           :style="{ '--accent': p.accent_color }"

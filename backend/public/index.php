@@ -84,5 +84,5 @@ try {
     Http::json(['error' => $e->getMessage(), 'fields' => (object) $e->fields], $e->status);
 } catch (Throwable $e) {
     error_log((string) $e);
-    Http::json(['error' => APP_DEBUG ? $e->getMessage() : 'Erro no servidor. Tente de novo em instantes.'], 500);
+    Http::json(['error' => APP_DEBUG ? $e->getMessage() : 'Server error. Please try again in a moment.'], 500);
 }

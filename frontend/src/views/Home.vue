@@ -26,8 +26,8 @@ const s = computed(() => site.settings || {})
 const stats = computed(() =>
   [
     [s.value.stat_downloads, 'downloads'],
-    [s.value.stat_projects, 'projetos lançados'],
-    [s.value.stat_years, 'anos criando'],
+    [s.value.stat_projects, 'projects shipped'],
+    [s.value.stat_years, 'years making Minecraft content'],
   ].filter(([v]) => v)
 )
 </script>
@@ -36,11 +36,11 @@ const stats = computed(() =>
   <section class="hero">
     <div class="wrap hero__grid">
       <div class="hero__text">
-        <h1 class="hero__title">{{ s.hero_title || 'Criamos mundos para Minecraft.' }}</h1>
+        <h1 class="hero__title">{{ s.hero_title || 'We build worlds for Minecraft.' }}</h1>
         <p class="hero__sub">{{ s.hero_subtitle }}</p>
         <div class="hero__actions">
-          <RouterLink to="/projetos" class="btn">Ver projetos</RouterLink>
-          <RouterLink to="/contato" class="btn btn--ghost">Falar com o estúdio</RouterLink>
+          <RouterLink to="/projects" class="btn">See our projects</RouterLink>
+          <RouterLink to="/contact" class="btn btn--ghost">Work with us</RouterLink>
         </div>
       </div>
       <div class="hero__mark" aria-hidden="true">
@@ -51,7 +51,7 @@ const stats = computed(() =>
   </section>
   <PixelEdge />
 
-  <section v-if="stats.length" class="stats wrap" aria-label="Números do estúdio">
+  <section v-if="stats.length" class="stats wrap" aria-label="Studio numbers">
     <dl class="stats__row">
       <div v-for="[value, label] in stats" :key="label">
         <dt>{{ label }}</dt>
@@ -60,31 +60,31 @@ const stats = computed(() =>
     </dl>
   </section>
 
-  <p v-if="loading" class="wrap state">Carregando projetos…</p>
-  <p v-else-if="failed" class="wrap state">Não deu para carregar os projetos agora. Recarregue a página.</p>
+  <p v-if="loading" class="wrap state">Loading projects…</p>
+  <p v-else-if="failed" class="wrap state">Projects could not be loaded. Refresh the page to try again.</p>
 
   <template v-else-if="featured">
-    <section class="wrap feature" aria-label="Lançamento em destaque">
-      <RouterLink v-reveal :to="`/projetos/${featured.slug}`" class="feature__card" :style="{ '--accent': featured.accent_color }">
+    <section class="wrap feature" aria-label="Featured release">
+      <RouterLink v-reveal :to="`/projects/${featured.slug}`" class="feature__card" :style="{ '--accent': featured.accent_color }">
         <div class="feature__media">
-          <img class="feature__img" :src="featured.banner_image || featured.cover_image" :alt="`Arte do ${featured.title}`" />
+          <img class="feature__img" :src="featured.banner_image || featured.cover_image" :alt="`${featured.title} key art`" />
         </div>
         <div class="feature__body">
           <div class="feature__text">
-            <span class="pill">Lançamento em destaque</span>
+            <span class="pill">Featured release</span>
             <h2 class="feature__title">{{ featured.title }}</h2>
             <p v-if="featured.tagline" class="feature__tag">{{ featured.tagline }}</p>
           </div>
-          <span class="btn">Ver projeto</span>
+          <span class="btn">View project</span>
         </div>
       </RouterLink>
     </section>
 
-    <section class="wrap work" aria-labelledby="titulo-projetos">
+    <section class="wrap work" aria-labelledby="projects-title">
       <header class="work__head">
-        <h2 id="titulo-projetos" class="work__title">Projetos</h2>
+        <h2 id="projects-title" class="work__title">Projects</h2>
         <p class="work__lead">
-          {{ projects.length }} addons para o Minecraft Bedrock, de máquinas e automação a magia e exploração.
+          {{ projects.length }} add-ons for Minecraft: Bedrock Edition, from machines and automation to magic and exploration.
         </p>
       </header>
 
@@ -100,7 +100,7 @@ const stats = computed(() =>
       </div>
 
       <div class="work__more">
-        <RouterLink to="/projetos" class="btn btn--purple">Ver todos os {{ projects.length }} projetos</RouterLink>
+        <RouterLink to="/projects" class="btn btn--purple">View all {{ projects.length }} projects</RouterLink>
       </div>
     </section>
   </template>
@@ -109,10 +109,10 @@ const stats = computed(() =>
     <div v-reveal class="cta__box">
       <div class="cta__mark" aria-hidden="true"><BrandMark gap="var(--byte)" /></div>
       <div class="cta__text">
-        <h2>Tem uma ideia para o Minecraft?</h2>
-        <p>Fazemos addons sob encomenda para marcas, criadores e servidores.</p>
+        <h2>Have an idea for Minecraft?</h2>
+        <p>We build custom add-ons for brands, creators and servers.</p>
       </div>
-      <RouterLink to="/contato" class="btn">Falar com o estúdio</RouterLink>
+      <RouterLink to="/contact" class="btn">Work with us</RouterLink>
     </div>
   </section>
 </template>

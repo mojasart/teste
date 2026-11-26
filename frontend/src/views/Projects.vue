@@ -22,7 +22,7 @@ onMounted(async () => {
   }
 })
 
-const active = computed(() => route.query.tipo || '')
+const active = computed(() => route.query.type || '')
 const usedCategories = computed(() => categories.value.filter((c) => c.total > 0))
 const shown = computed(() =>
   active.value ? projects.value.filter((p) => p.category?.slug === active.value) : projects.value
@@ -36,24 +36,24 @@ const bigCount = computed(() => {
 })
 
 function pick(slug) {
-  router.replace({ query: slug ? { tipo: slug } : {} })
+  router.replace({ query: slug ? { type: slug } : {} })
 }
 </script>
 
 <template>
   <section class="top">
     <div class="wrap top__inner">
-      <h1 class="top__title">Projetos</h1>
+      <h1 class="top__title">Projects</h1>
       <p v-if="!loading && !failed" class="top__lead">
-        {{ projects.length }} addons publicados no Minecraft Marketplace.
+        {{ projects.length }} add-ons released on the Minecraft Marketplace.
       </p>
     </div>
   </section>
   <PixelEdge :seed="5" />
 
   <section class="wrap list">
-    <div v-if="usedCategories.length > 1" class="filters" role="group" aria-label="Filtrar por tipo">
-      <button type="button" class="chip" :aria-pressed="!active" @click="pick('')">Todos</button>
+    <div v-if="usedCategories.length > 1" class="filters" role="group" aria-label="Filter by type">
+      <button type="button" class="chip" :aria-pressed="!active" @click="pick('')">All</button>
       <button
         v-for="c in usedCategories"
         :key="c.slug"
@@ -66,9 +66,9 @@ function pick(slug) {
       </button>
     </div>
 
-    <p v-if="loading" class="state">Carregando projetos…</p>
-    <p v-else-if="failed" class="state">Não deu para carregar os projetos agora. Recarregue a página.</p>
-    <p v-else-if="!shown.length" class="state">Nenhum projeto desse tipo ainda.</p>
+    <p v-if="loading" class="state">Loading projects…</p>
+    <p v-else-if="failed" class="state">Projects could not be loaded. Refresh the page to try again.</p>
+    <p v-else-if="!shown.length" class="state">No projects of this type yet.</p>
     <div v-else class="grid">
       <ProjectTile
         v-for="(p, i) in shown"

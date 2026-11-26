@@ -12,7 +12,7 @@ watchEffect(() => document.body.classList.toggle('night', !isAdmin.value))
 </script>
 
 <template>
-  <a class="skip" href="#conteudo">Pular para o conteúdo</a>
+  <a class="skip" href="#conteudo">Skip to content</a>
   <SiteHeader v-if="!isAdmin" />
   <main id="conteudo">
     <RouterView />

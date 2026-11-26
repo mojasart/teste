@@ -33,7 +33,7 @@ final class Addons
     {
         $row = Db::one(self::SELECT . ' WHERE a.slug = ?' . ($onlyPublished ? ' AND a.published = 1' : ''), [$slug]);
         if (!$row) {
-            throw new HttpError(404, 'Projeto não encontrado.');
+            throw new HttpError(404, 'Project not found.');
         }
         return self::present($row);
     }

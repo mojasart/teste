@@ -39,12 +39,12 @@ async function realApi(path, { method = 'GET', body, form } = {}) {
       body: form ?? (body !== undefined ? JSON.stringify(body) : undefined),
     })
   } catch {
-    throw new ApiError('Sem conexão com o servidor. Confira sua internet e tente de novo.', 0)
+    throw new ApiError('Could not reach the server. Check your connection and try again.', 0)
   }
   const data = await res.json().catch(() => ({}))
   if (!res.ok) {
     if (res.status === 401) admin.user = null
-    throw new ApiError(data.error || 'Algo deu errado. Tente de novo.', res.status, data.fields || {})
+    throw new ApiError(data.error || 'Something went wrong. Please try again.', res.status, data.fields || {})
   }
   return data
 }
@@ -74,5 +74,5 @@ export function youtubeId(url = '') {
 export function formatDate(iso) {
   if (!iso) return ''
   const [y, m, d] = iso.split('-').map(Number)
-  return new Date(y, m - 1, d).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })
+  return new Date(y, m - 1, d).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })
 }

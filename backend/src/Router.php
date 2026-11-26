@@ -29,6 +29,6 @@ final class Router
             $params = array_filter($match, 'is_string', ARRAY_FILTER_USE_KEY);
             Http::json($handler(...array_values($params)));
         }
-        throw new HttpError($allowed ? 405 : 404, $allowed ? 'Método não permitido.' : 'Rota não encontrada.');
+        throw new HttpError($allowed ? 405 : 404, $allowed ? 'Method not allowed.' : 'Not found.');
     }
 }
