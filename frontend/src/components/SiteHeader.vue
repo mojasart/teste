@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import logo from '../assets/logo-horizontal.png'
 import SocialIcons from './SocialIcons.vue'
@@ -14,9 +14,11 @@ const onKey = (e) => {
   if (e.key === 'Escape') open.value = false
 }
 
-// ao rolar, o cabeçalho se solta do topo e vira uma barra flutuante
-const floating = ref(false)
-const onScroll = () => (floating.value = window.scrollY > 40)
+// ao rolar, o cabeçalho acompanha a página como vidro escuro translúcido;
+// na página de um addon ele começa transparente, fundido com a arte desfocada
+const scrolled = ref(false)
+const onScroll = () => (scrolled.value = window.scrollY > 24)
+const overArt = computed(() => /^\/projects\/[^/]+/.test(route.path))
 
 onMounted(() => {
   addEventListener('keydown', onKey)
@@ -37,7 +39,7 @@ const links = [
 </script>
 
 <template>
-  <header class="header" :class="{ 'header--float': floating }">
+  <header class="header" :class="{ 'header--scrolled': scrolled, 'header--clear': overArt && !scrolled }">
     <div class="wrap header__bar">
       <RouterLink to="/" class="brand" aria-label="PurpleByte Studios home">
         <img class="brand__logo" :src="logo" alt="PurpleByte Studios" width="656" height="241" />
@@ -61,30 +63,31 @@ const links = [
       </button>
     </div>
 
-    <!-- gaveta lateral (celular) -->
-    <div class="drawer" :class="{ 'drawer--open': open }" :inert="!open">
-      <button class="drawer__backdrop" type="button" tabindex="-1" aria-hidden="true" @click="open = false"></button>
-      <div id="drawer" class="drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
-        <div class="drawer__top">
-          <img class="brand__logo" :src="logo" alt="" width="656" height="241" />
-          <button class="drawer__close" type="button" @click="open = false">
-            <span class="visually-hidden">Close menu</span>
-            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
-              <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3" />
-            </svg>
-          </button>
-        </div>
-        <nav class="drawer__nav" aria-label="Mobile">
-          <RouterLink to="/" class="drawer__link">Home</RouterLink>
-          <RouterLink v-for="l in links" :key="l.to" :to="l.to" class="drawer__link">{{ l.label }}</RouterLink>
-        </nav>
-        <div class="drawer__bottom">
-          <RouterLink to="/contact" class="btn">Work with us</RouterLink>
-          <SocialIcons />
-        </div>
+  </header>
+
+  <!-- gaveta lateral (celular) -->
+  <div class="drawer" :class="{ 'drawer--open': open }" :inert="!open">
+    <button class="drawer__backdrop" type="button" tabindex="-1" aria-hidden="true" @click="open = false"></button>
+    <div id="drawer" class="drawer__panel" role="dialog" aria-modal="true" aria-label="Menu">
+      <div class="drawer__top">
+        <img class="brand__logo" :src="logo" alt="" width="656" height="241" />
+        <button class="drawer__close" type="button" @click="open = false">
+          <span class="visually-hidden">Close menu</span>
+          <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+            <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="3" />
+          </svg>
+        </button>
+      </div>
+      <nav class="drawer__nav" aria-label="Mobile">
+        <RouterLink to="/" class="drawer__link">Home</RouterLink>
+        <RouterLink v-for="l in links" :key="l.to" :to="l.to" class="drawer__link">{{ l.label }}</RouterLink>
+      </nav>
+      <div class="drawer__bottom">
+        <RouterLink to="/contact" class="btn">Work with us</RouterLink>
+        <SocialIcons />
       </div>
     </div>
-  </header>
+  </div>
 </template>
 
 <style scoped>
@@ -92,9 +95,10 @@ const links = [
   position: sticky;
   top: 0;
   z-index: 30;
-  height: 76px;
   color: var(--white);
   background: var(--byte);
+  border-bottom: 1px solid transparent;
+  transition: background-color 300ms ease, border-color 300ms ease, backdrop-filter 300ms ease;
 }
 
 .header__bar {
@@ -102,41 +106,23 @@ const links = [
   align-items: center;
   justify-content: space-between;
   min-height: 76px;
-  border-radius: 0;
-  transition:
-    min-height 260ms cubic-bezier(0.2, 0.9, 0.2, 1),
-    margin 260ms cubic-bezier(0.2, 0.9, 0.2, 1),
-    border-radius 260ms ease,
-    box-shadow 260ms ease;
 }
 
-/* solto do topo: barra flutuante com sombra dura, seguindo a rolagem */
-.header--float {
+/* página de addon, no topo: transparente sobre a arte desfocada */
+.header--clear {
   background: transparent;
 }
 
-.header--float .header__bar {
-  width: calc(100% - 2 * clamp(12px, 3vw, 28px));
-  max-width: calc(var(--max) + 16px);
-  min-height: 60px;
-  margin-top: 10px;
-  padding-inline: clamp(14px, 2vw, 22px);
-  background: var(--byte);
-  border-radius: 14px;
-  box-shadow:
-    0 6px 0 var(--byte-deep),
-    0 24px 48px -16px rgb(10 4 24 / 0.7);
-  animation: drop 320ms cubic-bezier(0.2, 1.3, 0.4, 1);
+/* rolando: vidro escuro translúcido */
+.header--scrolled {
+  background: rgb(18 9 35 / 0.72);
+  border-bottom-color: rgb(255 255 255 / 0.07);
+  -webkit-backdrop-filter: blur(14px) saturate(1.4);
+  backdrop-filter: blur(14px) saturate(1.4);
 }
 
-.header--float .brand__logo {
-  height: 38px;
-}
-
-@keyframes drop {
-  from {
-    transform: translateY(-120%);
-  }
+.header--scrolled .nav__link::before {
+  box-shadow: 4px 4px 0 var(--byte);
 }
 
 .brand {
@@ -316,17 +302,8 @@ const links = [
 }
 
 @media (max-width: 680px) {
-  .header {
-    height: 64px;
-  }
-
   .header__bar {
     min-height: 64px;
-  }
-
-  .header--float .header__bar {
-    min-height: 54px;
-    margin-top: 8px;
   }
 
   .brand__logo {

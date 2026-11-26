@@ -160,14 +160,23 @@ function open(src) {
 .stage {
   position: relative;
   isolation: isolate;
-  padding-top: clamp(24px, 3vw, 40px);
+  /* sobe por baixo do cabeçalho, que fica transparente aqui */
+  margin-top: -77px;
+  padding-top: calc(77px + clamp(24px, 3vw, 40px));
+}
+
+@media (max-width: 680px) {
+  .stage {
+    margin-top: -65px;
+    padding-top: calc(65px + 20px);
+  }
 }
 
 .stage__glow {
   position: absolute;
   inset: 0 0 auto;
   width: 100%;
-  height: 90%;
+  height: 95%;
   object-fit: cover;
   filter: blur(60px) saturate(1.4);
   opacity: 0.45;
