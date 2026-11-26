@@ -1,0 +1,332 @@
+/* PurpleByte Studios — tokens e base
+   Linguagem: a do logo. Cantos chanfrados (corte em cima-esquerda e embaixo-direita),
+   sombras duras deslocadas, roxo do logo como cor de marca. */
+
+:root {
+  --byte: #8d4beb;        /* roxo do logo */
+  --byte-deep: #5e2ca8;   /* sombra do logo */
+  --ink: #24104a;         /* texto, rodapé */
+  --paper: #f4f0ff;       /* fundo do conteúdo */
+  --white: #ffffff;
+  --brass: #f5b82e;       /* ação principal (vem do Fabricate) */
+  --brass-deep: #b57a0c;
+  --muted: #5f4f80;
+  --line: #d9cdf5;
+  --danger: #c0264a;
+  --ok: #1f7a4d;
+
+  --font: 'Bricolage Grotesque Variable', 'Trebuchet MS', system-ui, sans-serif;
+
+  /* escala tipográfica (razão ~1.333) */
+  --step--1: 0.875rem;
+  --step-0: 1.0625rem;
+  --step-1: 1.375rem;
+  --step-2: 1.8rem;
+  --step-3: clamp(2.1rem, 4vw, 2.6rem);
+  --step-4: clamp(2.8rem, 8vw, 5.6rem);
+
+  /* parte escura do site (abaixo do hero) */
+  --night: #120923;
+  --night-2: #1b1033;
+  --night-3: #261747;
+  --hi: #f3eeff;
+  --mid: #a99bd0;
+
+  --cut: 18px;            /* tamanho do chanfro */
+  --gutter: clamp(16px, 4vw, 40px);
+  --max: 1200px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--paper);
+  font-variation-settings: 'wdth' 100;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* site público: escuro; o painel continua claro */
+body.night {
+  background: var(--night);
+  color: var(--hi);
+}
+
+body.night .input {
+  background: var(--night-2);
+  color: var(--hi);
+  border-color: var(--night-3);
+}
+
+body.night .input:focus {
+  border-color: var(--byte);
+}
+
+body.night .field small {
+  color: var(--mid);
+}
+
+/* pílula de informação (tipo, destaque) */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--hi);
+  background: rgb(141 75 235 / 0.28);
+  border: 1px solid rgb(141 75 235 / 0.6);
+  border-radius: 999px;
+}
+
+html.drawer-open {
+  overflow: hidden;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.05;
+  font-weight: 800;
+  font-stretch: 80%;
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--brass);
+  outline-offset: 3px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- chanfro ----------
+   .chamfer recorta; a sombra dura vem de um drop-shadow no pai (.lift),
+   porque clip-path corta box-shadow. */
+.chamfer {
+  clip-path: polygon(
+    var(--cut) 0, 100% 0, 100% calc(100% - var(--cut)),
+    calc(100% - var(--cut)) 100%, 0 100%, 0 var(--cut)
+  );
+}
+
+.lift {
+  --lift: 6px;
+  --lift-color: var(--byte-deep);
+  filter: drop-shadow(var(--lift) var(--lift) 0 var(--lift-color));
+}
+
+/* ---------- botões ---------- */
+.btn {
+  --btn-bg: var(--brass);
+  --btn-fg: var(--ink);
+  --btn-shadow: var(--brass-deep);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  min-height: 48px;
+  padding: 0.7em 1.3em;
+  font: inherit;
+  font-weight: 750;
+  font-stretch: 90%;
+  color: var(--btn-fg);
+  background: var(--btn-bg);
+  border: 0;
+  border-radius: 6px;
+  box-shadow: 0 5px 0 var(--btn-shadow);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 80ms ease, box-shadow 80ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 7px 0 var(--btn-shadow);
+}
+
+.btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--btn-shadow);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: currentColor;
+  --btn-shadow: transparent;
+  box-shadow: inset 0 0 0 3px currentColor;
+}
+
+.btn--ghost:hover {
+  transform: translateY(-2px);
+  color: var(--byte-deep);
+  background: var(--white);
+  box-shadow: inset 0 0 0 3px var(--white), 0 5px 0 var(--byte-deep);
+}
+
+.btn--ghost:active {
+  transform: none;
+  box-shadow: inset 0 0 0 3px var(--white);
+}
+
+.btn--purple {
+  --btn-bg: var(--byte);
+  --btn-fg: var(--white);
+  --btn-shadow: var(--byte-deep);
+}
+
+.btn--danger {
+  --btn-bg: var(--danger);
+  --btn-fg: var(--white);
+  --btn-shadow: #7d1530;
+}
+
+.btn--small {
+  min-height: 38px;
+  padding: 0.4em 0.9em;
+  font-size: var(--step--1);
+}
+
+/* ---------- formulários ---------- */
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field > span {
+  font-weight: 700;
+  font-size: var(--step--1);
+}
+
+.field small {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+.field .error {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--white);
+  border: 2px solid var(--line);
+  border-radius: 6px;
+}
+
+textarea.input {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.input:focus {
+  border-color: var(--byte);
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(141 75 235 / 0.25);
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+.notice {
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.notice--error {
+  background: #fde8ee;
+  color: var(--danger);
+}
+
+.notice--ok {
+  background: #e2f5ea;
+  color: var(--ok);
+}
+
+/* ---------- v-reveal: bloco sendo colocado ---------- */
+.will-place {
+  opacity: 0;
+}
+
+.will-place.is-placed {
+  opacity: 1;
+  animation: place 560ms cubic-bezier(0.25, 1.5, 0.5, 1) var(--delay, 0ms) backwards;
+}
+
+@keyframes place {
+  from {
+    opacity: 0;
+    transform: translateY(-28px) scale(1.03);
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .will-place {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
