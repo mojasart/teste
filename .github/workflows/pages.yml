@@ -1,0 +1,55 @@
+# Publica o site no GitHub Pages a cada push na main (branch gh-pages).
+# Domínio próprio: crie frontend/public/CNAME com o domínio (ex.: purplebyte.com)
+# e o build passa a usar "/" como base e o domínio nos links de prévia.
+name: Publica o site
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publica:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Define o endereço do site
+        run: |
+          if [ -f frontend/public/CNAME ]; then
+            echo "BASE=/" >> "$GITHUB_ENV"
+            echo "SITE_URL=https://$(tr -d '[:space:]' < frontend/public/CNAME)" >> "$GITHUB_ENV"
+          else
+            REPO="${GITHUB_REPOSITORY#*/}"
+            echo "BASE=/$REPO/" >> "$GITHUB_ENV"
+            echo "SITE_URL=https://${GITHUB_REPOSITORY_OWNER,,}.github.io/$REPO" >> "$GITHUB_ENV"
+          fi
+
+      - name: Build
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
+
+      - name: Envia para a branch gh-pages
+        run: |
+          cd frontend/dist
+          git init -q -b gh-pages
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Publica ${GITHUB_SHA::7}"
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" gh-pages

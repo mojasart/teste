@@ -1,12 +1,17 @@
 <script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import SectionTitle from './SectionTitle.vue'
 import SocialIcons from './SocialIcons.vue'
 const year = new Date().getFullYear()
+// a página de contato já lista as redes
+const route = useRoute()
+const showSocial = computed(() => route.path.replace(/\/$/, '') !== '/contact')
 </script>
 
 <template>
   <footer class="footer">
-    <section class="wrap" aria-labelledby="social-title">
+    <section v-if="showSocial" class="wrap" aria-labelledby="social-title">
       <SectionTitle id="social-title">Social</SectionTitle>
       <SocialIcons />
     </section>

@@ -1,6 +1,5 @@
 <script setup>
-import { computed } from 'vue'
-import { site } from '../api.js'
+import { site } from '../content.js'
 import x from '../assets/social/x.svg'
 import discord from '../assets/social/discord.svg'
 import youtube from '../assets/social/youtube.png'
@@ -8,15 +7,13 @@ import vatonage from '../assets/social/vatonage-mark.webp'
 
 // logos oficiais de cada marca; só aparecem os que têm link no painel
 const props = defineProps({ small: { type: Boolean, default: false } })
-const links = computed(() => {
-  const s = site.settings || {}
-  return [
-    ['X', x, s.social_twitter],
-    ['Discord', discord, s.social_discord],
-    ['YouTube', youtube, s.social_youtube],
-    ['Vatonage', vatonage, s.social_vatonage],
-  ].filter(([, , url]) => url)
-})
+const s = site.social
+const links = [
+  ['X', x, s.x],
+  ['Discord', discord, s.discord],
+  ['YouTube', youtube, s.youtube],
+  ['Vatonage', vatonage, s.vatonage],
+].filter(([, , url]) => url)
 </script>
 
 <template>

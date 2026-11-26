@@ -1,49 +1,22 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { api, paragraphs } from '../api.js'
+import { content, findAddon, paragraphs } from '../content.js'
 import GalleryViewer from '../components/GalleryViewer.vue'
 import PremiumCard from '../components/PremiumCard.vue'
 import SectionTitle from '../components/SectionTitle.vue'
 import VideoModal from '../components/VideoModal.vue'
 
 const route = useRoute()
-const addon = ref(null)
-const others = ref([])
-const status = ref('loading')
 const trailer = ref('')
-
-watch(
-  () => route.params.slug,
-  async (slug) => {
-    if (!slug) return
-    status.value = 'loading'
-    try {
-      const [a, all] = await Promise.all([api(`/addons/${encodeURIComponent(slug)}`), api('/addons')])
-      addon.value = a
-      others.value = all.filter((x) => x.category?.slug === 'premium' && x.slug !== a.slug)
-      document.title = `${a.title} | PurpleByte Studios`
-      status.value = 'ok'
-    } catch (e) {
-      status.value = e.status === 404 ? 'missing' : 'error'
-    }
-  },
-  { immediate: true }
-)
-
-const body = computed(() => paragraphs(addon.value?.description))
+// o roteador só abre esta página para addons que existem
+const addon = computed(() => findAddon(route.params.slug))
+const others = computed(() => content.premium.filter((x) => x.slug !== addon.value.slug))
+const body = computed(() => paragraphs(addon.value.description))
 </script>
 
 <template>
-  <p v-if="status === 'loading'" class="wrap state">Loading…</p>
-
-  <section v-else-if="status !== 'ok'" class="wrap state">
-    <h1 class="display">{{ status === 'missing' ? 'This add-on does not exist.' : 'This add-on could not be loaded.' }}</h1>
-    <p v-if="status === 'error'">Check your connection and refresh the page.</p>
-    <RouterLink to="/" class="btn btn--light">Back to all add-ons</RouterLink>
-  </section>
-
-  <article v-else class="addon" :style="{ '--tint': addon.accent_color }">
+  <article :key="addon.slug" class="addon" :style="{ '--tint': addon.accent }">
     <div class="wrap">
       <RouterLink :to="{ path: '/', hash: '#premium' }" class="back">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6" /></svg>
@@ -52,7 +25,8 @@ const body = computed(() => paragraphs(addon.value?.description))
 
       <header class="top">
         <div class="top__art">
-          <img :src="addon.cover_image" :alt="`${addon.title} key art`" />
+          <img :src="addon.keyart" :alt="`${addon.title} key art`" />
+          <span v-if="addon.badge" class="badge">{{ addon.badge }}</span>
         </div>
         <div class="top__text">
           <h1 class="top__title display">{{ addon.title }}</h1>
@@ -61,11 +35,11 @@ const body = computed(() => paragraphs(addon.value?.description))
             <p v-for="(p, n) in body" :key="n">{{ p }}</p>
           </div>
           <div class="top__actions">
-            <button v-if="addon.trailer_url" type="button" class="btn btn--accent" @click="trailer = addon.trailer_url">
+            <button v-if="addon.trailer" type="button" class="btn btn--accent" @click="trailer = addon.trailer">
               <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor" /></svg>
               Watch Trailer
             </button>
-            <a v-if="addon.marketplace_url" :href="addon.marketplace_url" target="_blank" rel="noopener" class="btn btn--light">
+            <a v-if="addon.marketplace" :href="addon.marketplace" target="_blank" rel="noopener" class="btn btn--light">
               Get it on the Marketplace
             </a>
             <a v-if="addon.gallery.length" href="#addon-gallery" class="top__link">
@@ -84,7 +58,7 @@ const body = computed(() => paragraphs(addon.value?.description))
       <section v-if="others.length" class="block" aria-labelledby="m-title">
         <SectionTitle id="m-title">More Add-ons</SectionTitle>
         <div class="more">
-          <PremiumCard v-for="(a, n) in others" :key="a.id" v-reveal="n" :addon="a" />
+          <PremiumCard v-for="(a, n) in others" :key="a.slug" v-reveal="n" :addon="a" />
         </div>
       </section>
     </div>
@@ -94,19 +68,6 @@ const body = computed(() => paragraphs(addon.value?.description))
 </template>
 
 <style scoped>
-.state {
-  display: grid;
-  justify-items: start;
-  gap: 16px;
-  padding-block: 120px;
-  color: var(--mid);
-}
-
-.state h1 {
-  font-size: var(--step-3);
-  color: var(--hi);
-}
-
 .addon {
   padding-top: 24px;
 }
@@ -143,10 +104,26 @@ const body = computed(() => paragraphs(addon.value?.description))
 }
 
 .top__art {
+  position: relative;
   overflow: hidden;
   border-radius: 4px;
   box-shadow: 0 40px 90px -40px var(--tint);
   animation: art 700ms cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+}
+
+.badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 6px 12px;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.02em;
+  color: #1c1527;
+  background: var(--brass);
+  border-radius: 3px;
+  box-shadow: 0 3px 0 var(--brass-deep);
 }
 
 .top__art img {

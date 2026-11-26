@@ -5,7 +5,8 @@ defineProps({ addon: { type: Object, required: true } })
 <template>
   <RouterLink :to="`/addons/${addon.slug}`" class="pcard" :style="{ '--accent': addon.accent_color }">
     <div class="pcard__art">
-      <img :src="addon.cover_image" :alt="`${addon.title} key art`" loading="lazy" />
+      <img :src="addon.keyart" :alt="`${addon.title} key art`" loading="lazy" />
+      <span v-if="addon.badge" class="pcard__badge display">{{ addon.badge }}</span>
     </div>
     <div class="pcard__name">
       <h3 class="display">{{ addon.title }}</h3>
@@ -36,6 +37,7 @@ defineProps({ addon: { type: Object, required: true } })
 }
 
 .pcard__art {
+  position: relative;
   aspect-ratio: 16 / 9;
   overflow: hidden;
 }
@@ -51,6 +53,25 @@ defineProps({ addon: { type: Object, required: true } })
   transform: scale(1.06);
 }
 
+.pcard__badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 3px 9px;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: #1c1527;
+  background: var(--brass);
+  border-radius: 3px;
+  box-shadow: 0 3px 0 var(--brass-deep);
+}
+
+@media (max-width: 640px) {
+  .pcard__badge {
+    display: none;
+  }
+}
+
 .pcard__name {
   display: flex;
   align-items: center;
@@ -61,6 +82,7 @@ defineProps({ addon: { type: Object, required: true } })
 }
 
 .pcard__name h3 {
+  min-width: 0;
   font-size: clamp(1.6rem, 2.6vw, 2.2rem);
   line-height: 1;
   text-transform: uppercase;

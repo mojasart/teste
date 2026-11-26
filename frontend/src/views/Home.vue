@@ -1,6 +1,6 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { api, site } from '../api.js'
+import { computed, ref } from 'vue'
+import { content, site } from '../content.js'
 import HeroSlides from '../components/HeroSlides.vue'
 import PremiumCard from '../components/PremiumCard.vue'
 import GalleryRows from '../components/GalleryRows.vue'
@@ -8,62 +8,37 @@ import FreeCard from '../components/FreeCard.vue'
 import SectionTitle from '../components/SectionTitle.vue'
 import VideoModal from '../components/VideoModal.vue'
 
-const addons = ref([])
-const status = ref('loading')
 const trailer = ref('')
-
-onMounted(async () => {
-  try {
-    addons.value = await api('/addons')
-    status.value = 'ok'
-  } catch {
-    status.value = 'error'
-  }
-})
-
-const premium = computed(() => addons.value.filter((a) => a.category?.slug === 'premium'))
-const free = computed(() => addons.value.filter((a) => a.category?.slug === 'free'))
-const featured = computed(() => premium.value.find((a) => a.featured) || premium.value[0])
+const premium = content.premium
+const free = content.free
+const featured = premium.find((a) => a.featured) || premium[0]
 
 // topo: imagem principal + prints do addon em destaque
-const slides = computed(() => {
-  const f = featured.value
-  if (!f) return []
-  const first = f.banner_image ? [{ src: f.banner_image, alt: `${f.title} key art` }] : []
-  return [...first, ...f.gallery.map((g) => ({ src: g.src, alt: g.alt }))].slice(0, 7)
-})
+const slides = [
+  ...(featured.hero ? [{ src: featured.hero, alt: `${featured.title} key art` }] : []),
+  ...featured.gallery.map((g) => ({ src: g.src, alt: g.alt })),
+].slice(0, 7)
 
 // galeria: prints de todos os premium, intercalados
-const gallery = computed(() => {
-  const lists = premium.value.map((a) => a.gallery.map((g) => ({ ...g, title: a.title })))
+const gallery = (() => {
+  const lists = premium.map((a) => a.gallery.map((g) => ({ ...g, title: a.title })))
   const out = []
   for (let n = 0; lists.some((l) => l[n]); n++) lists.forEach((l) => l[n] && out.push(l[n]))
   return out
-})
+})()
 
 const showAll = ref(false)
-const freeShown = computed(() => (showAll.value ? free.value : free.value.slice(0, 12)))
-const moreUrl = computed(() => site.settings?.free_more_url)
+const freeShown = computed(() => (showAll.value ? free : free.slice(0, 12)))
+const moreUrl = site.freeMoreUrl
 </script>
 
 <template>
-  <div v-if="status === 'loading'" class="loading" aria-live="polite">
-    <span class="loading__bar"></span>
-    <span class="visually-hidden">Loading</span>
-  </div>
-
-  <section v-else-if="status === 'error'" class="wrap state">
-    <h1 class="display">Our add-ons could not be loaded.</h1>
-    <p>Check your connection and refresh the page.</p>
-  </section>
-
-  <template v-else>
-    <HeroSlides v-if="featured" :addon="featured" :slides="slides" @trailer="trailer = featured.trailer_url" />
+    <HeroSlides v-if="featured" :addon="featured" :slides="slides" @trailer="trailer = featured.trailer" />
 
     <section id="premium" class="wrap premium" aria-label="Premium Content">
       <h2 class="visually-hidden">Premium Content</h2>
       <div class="premium__grid">
-        <PremiumCard v-for="(a, n) in premium" :key="a.id" v-reveal="n" :addon="a" :class="{ 'premium__mid': n % 3 === 1 }" />
+        <PremiumCard v-for="(a, n) in premium" :key="a.slug" v-reveal="n" :addon="a" :class="{ 'premium__mid': n % 3 === 1 }" />
       </div>
     </section>
 
@@ -75,7 +50,7 @@ const moreUrl = computed(() => site.settings?.free_more_url)
     <section v-if="free.length" id="free" class="wrap free" aria-labelledby="free-title">
       <SectionTitle id="free-title">Free Content</SectionTitle>
       <div class="free__grid">
-        <FreeCard v-for="(a, n) in freeShown" :key="a.id" v-reveal="n % 3" :addon="a" />
+        <FreeCard v-for="(a, n) in freeShown" :key="a.slug" v-reveal="n % 3" :addon="a" />
       </div>
       <div class="free__more">
         <button v-if="!showAll && free.length > 12" type="button" class="btn btn--accent" @click="showAll = true">
@@ -88,46 +63,10 @@ const moreUrl = computed(() => site.settings?.free_more_url)
       </div>
     </section>
 
-    <VideoModal :src="trailer" :title="`${featured?.title} trailer`" @close="trailer = ''" />
-  </template>
+    <VideoModal :src="trailer" :title="`${featured.title} trailer`" @close="trailer = ''" />
 </template>
 
 <style scoped>
-.loading {
-  display: grid;
-  place-items: center;
-  min-height: 60vh;
-}
-
-.loading__bar {
-  width: 120px;
-  height: 4px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent-hi), transparent) 0 0 / 50% 100% no-repeat var(--panel);
-  animation: load 1s linear infinite;
-}
-
-@keyframes load {
-  from {
-    background-position: -100% 0;
-  }
-  to {
-    background-position: 200% 0;
-  }
-}
-
-.state {
-  display: grid;
-  gap: 12px;
-  padding-block: 120px;
-  color: var(--mid);
-}
-
-.state h1 {
-  font-size: var(--step-3);
-  color: var(--hi);
-}
-
 /* cartões premium sobem por cima do fim do hero */
 .premium {
   position: relative;

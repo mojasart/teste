@@ -31,7 +31,10 @@ const links = [
   { to: { path: '/', hash: '#free' }, label: 'Free Content' },
   { to: { path: '/contact' }, label: 'Contact' },
 ]
-const isActive = (l) => (l.to.hash ? route.path === '/' && route.hash === l.to.hash : route.path === l.to.path)
+const isActive = (l) => {
+  const path = route.path.replace(/(.)\/$/, '$1') // endereços abertos direto vêm com barra no fim
+  return l.to.hash ? path === '/' && route.hash === l.to.hash : path === l.to.path
+}
 </script>
 
 <template>

@@ -4,18 +4,18 @@ defineProps({ addon: { type: Object, required: true } })
 
 <template>
   <component
-    :is="addon.marketplace_url ? 'a' : 'div'"
-    :href="addon.marketplace_url || undefined"
-    :target="addon.marketplace_url ? '_blank' : undefined"
-    :rel="addon.marketplace_url ? 'noopener' : undefined"
+    :is="addon.link ? 'a' : 'div'"
+    :href="addon.link || undefined"
+    :target="addon.link ? '_blank' : undefined"
+    :rel="addon.link ? 'noopener' : undefined"
     class="fcard"
-    :class="{ 'fcard--link': addon.marketplace_url }"
+    :class="{ 'fcard--link': addon.link }"
   >
-    <img class="fcard__glow" :src="addon.cover_image" alt="" aria-hidden="true" />
-    <span class="fcard__icon"><img :src="addon.cover_image" alt="" width="144" height="144" /></span>
+    <img class="fcard__glow" :src="addon.icon" alt="" aria-hidden="true" />
+    <span class="fcard__icon"><img :src="addon.icon" alt="" width="144" height="144" /></span>
     <span class="fcard__name">{{ addon.title }}</span>
-    <svg v-if="addon.marketplace_url" class="fcard__go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" /></svg>
-    <span v-if="addon.marketplace_url" class="visually-hidden">(opens the download page)</span>
+    <svg v-if="addon.link" class="fcard__go" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" /></svg>
+    <span v-if="addon.link" class="visually-hidden">(opens the download page)</span>
   </component>
 </template>
 

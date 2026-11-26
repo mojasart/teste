@@ -44,10 +44,11 @@ onBeforeUnmount(() => clearInterval(timer))
     </div>
 
     <div class="wrap hero__content">
+      <span v-if="addon.badge" class="hero__badge display">{{ addon.badge }}</span>
       <h1 class="hero__title">{{ addon.title }} Add-On</h1>
       <p class="hero__tag">{{ addon.tagline }}</p>
       <div class="hero__actions">
-        <button v-if="addon.trailer_url" type="button" class="btn btn--light" @click="emit('trailer')">
+        <button v-if="addon.trailer" type="button" class="btn btn--light" @click="emit('trailer')">
           <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M7 4l13 8-13 8z" fill="currentColor" /></svg>
           Watch Trailer
         </button>
@@ -130,6 +131,17 @@ onBeforeUnmount(() => clearInterval(timer))
   gap: 10px;
 }
 
+.hero__badge {
+  padding: 4px 10px;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  color: #1c1527;
+  background: var(--brass);
+  border-radius: 3px;
+  box-shadow: 0 3px 0 var(--brass-deep);
+  animation: up 800ms cubic-bezier(0.2, 0.8, 0.2, 1) 60ms backwards;
+}
+
 .hero__title {
   font-family: var(--font);
   font-weight: 600;
@@ -169,7 +181,8 @@ onBeforeUnmount(() => clearInterval(timer))
   position: absolute;
   left: 0;
   right: 0;
-  bottom: clamp(70px, 9vw, 120px);
+  /* acima da faixa onde os cartões premium sobem por cima do hero */
+  bottom: clamp(104px, calc(12vw + 26px), 176px);
   margin-inline: auto;
   display: flex;
   justify-content: flex-end;

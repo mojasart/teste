@@ -1,7 +1,7 @@
 <script setup>
 // Trailer em tela cheia: vídeo do próprio site (.mp4) ou YouTube.
 import { computed, ref, watch } from 'vue'
-import { youtubeId } from '../api.js'
+import { youtubeId } from '../content.js'
 
 const props = defineProps({
   src: { type: String, default: '' }, // vazio = fechado
@@ -30,7 +30,7 @@ watch(
         allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
         allowfullscreen
       ></iframe>
-      <video v-else :src="src" controls autoplay playsinline></video>
+      <video v-else :src="src" controls autoplay playsinline preload="metadata"></video>
     </div>
     <button type="button" class="vm__close" @click="emit('close')">
       <span class="visually-hidden">Close trailer</span>

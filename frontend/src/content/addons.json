@@ -1,0 +1,269 @@
+{
+  "premium": [
+    {
+      "slug": "fabricate",
+      "title": "Fabricate",
+      "tagline": "Machines, automation, and new ways to build.",
+      "description": "Explore factories, conveyor systems, trains, and flying machines.\n\nBuild production lines that run on their own, craft new machines and take on the Smelter Colossus.",
+      "keyart": "media/fabricate-keyart.webp",
+      "hero": "media/hero-fabricate.webp",
+      "accent": "#F5B82E",
+      "featured": true,
+      "marketplace": "",
+      "trailer": "media/fabricate-trailer.mp4",
+      "gallery": [
+        {
+          "src": "media/fabricate-01.webp",
+          "thumb": "media/thumbs/fabricate-01.webp",
+          "alt": "Automated conveyor belts inside a Fabricate factory"
+        },
+        {
+          "src": "media/fabricate-02.webp",
+          "thumb": "media/thumbs/fabricate-02.webp",
+          "alt": "Automated crop and livestock farm with conveyor belts"
+        },
+        {
+          "src": "media/fabricate-03.webp",
+          "thumb": "media/thumbs/fabricate-03.webp",
+          "alt": "Golden steam train at a Minecraft station"
+        },
+        {
+          "src": "media/fabricate-04.webp",
+          "thumb": "media/thumbs/fabricate-04.webp",
+          "alt": "Fabricate car and flying machine outside a workshop"
+        },
+        {
+          "src": "media/fabricate-05.webp",
+          "thumb": "media/thumbs/fabricate-05.webp",
+          "alt": "A player facing the Smelter Colossus boss"
+        },
+        {
+          "src": "media/fabricate-06.webp",
+          "thumb": "media/thumbs/fabricate-06.webp",
+          "alt": "Collection of Fabricate machines, blocks and tools"
+        },
+        {
+          "src": "media/fabricate-07.webp",
+          "thumb": "media/thumbs/fabricate-07.webp",
+          "alt": "Industrial smelters and processing machines in a factory"
+        },
+        {
+          "src": "media/fabricate-08.webp",
+          "thumb": "media/thumbs/fabricate-08.webp",
+          "alt": "Fabricate train, car and flying machines"
+        },
+        {
+          "src": "media/fabricate-09.webp",
+          "thumb": "media/thumbs/fabricate-09.webp",
+          "alt": "Gears and conveyor machinery inside a workshop"
+        },
+        {
+          "src": "media/fabricate-10.webp",
+          "thumb": "media/thumbs/fabricate-10.webp",
+          "alt": "Players exploring a Fabricate machinery workshop"
+        },
+        {
+          "src": "media/fabricate-12.webp",
+          "thumb": "media/thumbs/fabricate-12.webp",
+          "alt": "Fabricate machinery and enemies in the Nether"
+        },
+        {
+          "src": "media/fabricate-13.webp",
+          "thumb": "media/thumbs/fabricate-13.webp",
+          "alt": "A large factory with interconnected production lines"
+        }
+      ],
+      "badge": "Coming soon"
+    },
+    {
+      "slug": "all-the-stuff",
+      "title": "All The Stuff",
+      "tagline": "Tools, equipment, and technology for your next adventure.",
+      "description": "Tools, equipment, and technology for your next Minecraft adventure. Explore the quest book, crafting recipes, and new gear.",
+      "keyart": "media/all-the-stuff-keyart.webp",
+      "hero": "media/all-the-stuff-01.webp",
+      "accent": "#B44BEB",
+      "featured": false,
+      "marketplace": "",
+      "trailer": "",
+      "gallery": [
+        {
+          "src": "media/all-the-stuff-01.webp",
+          "thumb": "media/thumbs/all-the-stuff-01.webp",
+          "alt": "In-game inventory information and minimap in All The Stuff"
+        },
+        {
+          "src": "media/all-the-stuff-02.webp",
+          "thumb": "media/thumbs/all-the-stuff-02.webp",
+          "alt": "Item encyclopedia and crafting recipe interface"
+        },
+        {
+          "src": "media/all-the-stuff-03.webp",
+          "thumb": "media/thumbs/all-the-stuff-03.webp",
+          "alt": "Quest book showing a branching technology progression"
+        },
+        {
+          "src": "media/all-the-stuff-04.webp",
+          "thumb": "media/thumbs/all-the-stuff-04.webp",
+          "alt": "Fighting creatures with advanced equipment in a cave"
+        },
+        {
+          "src": "media/all-the-stuff-05.webp",
+          "thumb": "media/thumbs/all-the-stuff-05.webp",
+          "alt": "A player holding a powered sword inside a Minecraft house"
+        },
+        {
+          "src": "media/all-the-stuff-06.webp",
+          "thumb": "media/thumbs/all-the-stuff-06.webp",
+          "alt": "A player wearing red armor in a grassy landscape"
+        },
+        {
+          "src": "media/all-the-stuff-07.webp",
+          "thumb": "media/thumbs/all-the-stuff-07.webp",
+          "alt": "Nighttime combat with a futuristic weapon"
+        },
+        {
+          "src": "media/all-the-stuff-08.webp",
+          "thumb": "media/thumbs/all-the-stuff-08.webp",
+          "alt": "Fighting a zombie villager using an energy weapon"
+        },
+        {
+          "src": "media/all-the-stuff-09.webp",
+          "thumb": "media/thumbs/all-the-stuff-09.webp",
+          "alt": "Exploring a grassy Minecraft landscape at night"
+        }
+      ],
+      "badge": ""
+    },
+    {
+      "slug": "zombie-craft",
+      "title": "Zombie Craft",
+      "tagline": "Survive a world taken over by zombies.",
+      "description": "Ruined cities, abandoned vehicles and hordes of zombies. Scavenge, gear up and survive.",
+      "keyart": "media/zombie-craft-keyart.webp",
+      "hero": "media/zombie-craft-01.webp",
+      "accent": "#E0562E",
+      "featured": false,
+      "marketplace": "",
+      "trailer": "",
+      "gallery": [
+        {
+          "src": "media/zombie-craft-01.webp",
+          "thumb": "media/thumbs/zombie-craft-01.webp",
+          "alt": "Zombies surrounding abandoned vehicles on a city street"
+        },
+        {
+          "src": "media/zombie-craft-02.webp",
+          "thumb": "media/thumbs/zombie-craft-02.webp",
+          "alt": "Abandoned city buildings and cars at night"
+        },
+        {
+          "src": "media/zombie-craft-03.webp",
+          "thumb": "media/thumbs/zombie-craft-03.webp",
+          "alt": "An overgrown tower at sunset"
+        },
+        {
+          "src": "media/zombie-craft-04.webp",
+          "thumb": "media/thumbs/zombie-craft-04.webp",
+          "alt": "An abandoned hospital among ruined city buildings"
+        },
+        {
+          "src": "media/zombie-craft-05.webp",
+          "thumb": "media/thumbs/zombie-craft-05.webp",
+          "alt": "A radar installation beside a snowy frozen lake"
+        },
+        {
+          "src": "media/zombie-craft-06.webp",
+          "thumb": "media/thumbs/zombie-craft-06.webp",
+          "alt": "A wooden watchtower above a forest at sunset"
+        },
+        {
+          "src": "media/zombie-craft-07.webp",
+          "thumb": "media/thumbs/zombie-craft-07.webp",
+          "alt": "Ruined city towers in the evening light"
+        }
+      ],
+      "badge": ""
+    }
+  ],
+  "free": [
+    {
+      "slug": "bonsai-pots",
+      "title": "Bonsai Pots",
+      "icon": "media/addons/bonsai-pots.webp",
+      "link": ""
+    },
+    {
+      "slug": "dynamic-lights",
+      "title": "Dynamic Lights",
+      "icon": "media/addons/dynamic-lights-project.webp",
+      "link": "https://vatonage.com/mods/dynamic-lights-add-on"
+    },
+    {
+      "slug": "more-tools",
+      "title": "More Tools",
+      "icon": "media/addons/more-tools-project.webp",
+      "link": ""
+    },
+    {
+      "slug": "waystones-project",
+      "title": "Waystones Project",
+      "icon": "media/addons/waystones-project.webp",
+      "link": "https://vatonage.com/mods/waystone-add-on"
+    },
+    {
+      "slug": "advanced-furnaces",
+      "title": "Advanced Furnaces",
+      "icon": "media/addons/advanced-furnaces.webp",
+      "link": "https://vatonage.com/mods/advanced-furnaces-add-on"
+    },
+    {
+      "slug": "real-gravestone",
+      "title": "Real Gravestone",
+      "icon": "media/addons/gravestone-pb.webp",
+      "link": ""
+    },
+    {
+      "slug": "animal-net",
+      "title": "Animal Net",
+      "icon": "media/addons/animal-net.webp",
+      "link": ""
+    },
+    {
+      "slug": "simple-storage",
+      "title": "Simple Storage",
+      "icon": "media/addons/simple-storage.webp",
+      "link": ""
+    },
+    {
+      "slug": "cardboard-box",
+      "title": "Cardboard Box",
+      "icon": "media/addons/cardboard-box-addon.webp",
+      "link": ""
+    },
+    {
+      "slug": "more-ores",
+      "title": "More Ores",
+      "icon": "media/addons/more-ores-add-on.webp",
+      "link": "https://vatonage.com/mods/more-ores-add-on"
+    },
+    {
+      "slug": "backpacks",
+      "title": "Backpacks",
+      "icon": "media/addons/backpacks-add-on.webp",
+      "link": "https://vatonage.com/mods/backpacks-add-on"
+    },
+    {
+      "slug": "elevators",
+      "title": "Elevators",
+      "icon": "media/addons/elevators-addon.webp",
+      "link": "https://vatonage.com/mods/elevators-add-on"
+    },
+    {
+      "slug": "more-chests",
+      "title": "More Chests",
+      "icon": "media/addons/more-chests.webp",
+      "link": "https://vatonage.com/mods/more-chests-add-on"
+    }
+  ]
+}
