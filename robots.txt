@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mojasart.github.io/teste/sitemap.xml
