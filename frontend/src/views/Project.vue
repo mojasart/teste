@@ -2,9 +2,11 @@
 import { computed, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { api, formatDate, paragraphs, youtubeId } from '../api.js'
+import ProjectTile from '../components/ProjectTile.vue'
 
 const route = useRoute()
 const project = ref(null)
+const others = ref([])
 const status = ref('loading') // loading | ok | missing | error
 const viewer = ref(null)
 const viewing = ref('')
@@ -15,8 +17,12 @@ watch(
     if (!slug) return
     status.value = 'loading'
     try {
-      project.value = await api(`/addons/${encodeURIComponent(slug)}`)
-      document.title = `${project.value.title} | PurpleByte Studios`
+      const [p, all] = await Promise.all([api(`/addons/${encodeURIComponent(slug)}`), api('/addons')])
+      project.value = p
+      // três outros projetos, começando pelos que vêm logo depois deste
+      const i = all.findIndex((a) => a.slug === p.slug)
+      others.value = [...all.slice(i + 1), ...all.slice(0, Math.max(i, 0))].slice(0, 3)
+      document.title = `${p.title} | PurpleByte Studios`
       status.value = 'ok'
     } catch (e) {
       status.value = e.status === 404 ? 'missing' : 'error'
@@ -25,6 +31,7 @@ watch(
   { immediate: true }
 )
 
+const art = computed(() => project.value?.banner_image || project.value?.cover_image)
 const video = computed(() => youtubeId(project.value?.trailer_url))
 const body = computed(() => paragraphs(project.value?.description))
 
@@ -48,53 +55,53 @@ function open(src) {
   </section>
 
   <article v-else class="project" :style="{ '--accent': project.accent_color }">
-    <header class="project__top">
-      <div class="wrap">
-        <RouterLink to="/projetos" class="back">Todos os projetos</RouterLink>
-        <div v-if="project.banner_image || project.cover_image" class="project__banner lift">
-          <img class="chamfer" :src="project.banner_image || project.cover_image" :alt="`Arte do ${project.title}`" />
+    <header class="hero">
+      <img v-if="art" class="hero__bg" :src="art" alt="" aria-hidden="true" />
+      <div class="wrap hero__grid">
+        <div class="hero__text">
+          <RouterLink to="/projetos" class="back">Todos os projetos</RouterLink>
+          <h1 class="hero__title">{{ project.title }}</h1>
+          <p v-if="project.tagline" class="hero__tag">{{ project.tagline }}</p>
+          <dl class="facts">
+            <div v-if="project.category">
+              <dt>Tipo</dt>
+              <dd>{{ project.category.name }}</dd>
+            </div>
+            <div v-if="project.release_date">
+              <dt>Lançamento</dt>
+              <dd>{{ formatDate(project.release_date) }}</dd>
+            </div>
+            <div>
+              <dt>Plataforma</dt>
+              <dd>Minecraft Bedrock</dd>
+            </div>
+          </dl>
+          <div class="hero__actions">
+            <a v-if="project.marketplace_url" :href="project.marketplace_url" target="_blank" rel="noopener" class="btn">
+              Ver no Marketplace
+            </a>
+            <a v-if="video" href="#trailer" class="btn btn--ghost">Assistir ao trailer</a>
+          </div>
+        </div>
+        <div v-if="art" class="hero__art">
+          <img :src="art" :alt="`Arte do ${project.title}`" />
         </div>
       </div>
     </header>
 
-    <div class="wrap project__main">
-      <div class="project__intro">
-        <h1 class="project__title">{{ project.title }}</h1>
-        <p v-if="project.tagline" class="project__tagline">{{ project.tagline }}</p>
-      </div>
-
-      <aside class="project__side">
-        <dl class="facts">
-          <div v-if="project.category">
-            <dt>Tipo</dt>
-            <dd>{{ project.category.name }}</dd>
-          </div>
-          <div v-if="project.release_date">
-            <dt>Lançamento</dt>
-            <dd>{{ formatDate(project.release_date) }}</dd>
-          </div>
-        </dl>
-        <a v-if="project.marketplace_url" :href="project.marketplace_url" target="_blank" rel="noopener" class="btn">
-          Ver no Marketplace
-        </a>
-      </aside>
-
-      <div class="project__body">
-        <p v-for="(p, i) in body" :key="i">{{ p }}</p>
-      </div>
+    <div v-if="body.length" class="wrap info">
+      <p v-for="(p, i) in body" :key="i">{{ p }}</p>
     </div>
 
-    <section v-if="video" class="wrap block" aria-label="Trailer">
-      <div class="video lift">
-        <iframe
-          class="chamfer"
-          :src="`https://www.youtube-nocookie.com/embed/${video}`"
-          :title="`Trailer do ${project.title}`"
-          loading="lazy"
-          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        ></iframe>
-      </div>
+    <section v-if="video" id="trailer" class="wrap block" aria-label="Trailer">
+      <iframe
+        class="video"
+        :src="`https://www.youtube-nocookie.com/embed/${video}`"
+        :title="`Trailer do ${project.title}`"
+        loading="lazy"
+        allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
     </section>
 
     <section v-if="project.gallery.length" class="wrap block" aria-labelledby="galeria">
@@ -109,6 +116,16 @@ function open(src) {
       </ul>
     </section>
 
+    <section v-if="others.length" class="wrap block more" aria-labelledby="mais">
+      <div class="more__head">
+        <h2 id="mais" class="block__title">Mais projetos</h2>
+        <RouterLink to="/projetos" class="more__all">Ver todos</RouterLink>
+      </div>
+      <div class="more__grid">
+        <ProjectTile v-for="(p, i) in others" :key="p.id" v-reveal="i" :project="p" />
+      </div>
+    </section>
+
     <dialog ref="viewer" class="viewer" @click.self="viewer.close()">
       <img :src="viewing" :alt="`Imagem ampliada do ${project.title}`" />
       <button type="button" class="btn btn--small viewer__close" @click="viewer.close()">Fechar</button>
@@ -121,81 +138,117 @@ function open(src) {
   display: grid;
   justify-items: start;
   gap: 20px;
-  padding-block: 80px;
+  padding-block: 96px;
   font-size: var(--step-1);
+  color: var(--mid);
 }
 
 .state h1 {
   font-size: var(--step-3);
+  color: var(--hi);
 }
 
-.project__top {
-  /* faixa na cor do projeto que termina no meio do banner */
-  background: linear-gradient(var(--accent) 0 62%, transparent 62%);
-  padding-top: 24px;
+/* ---------- topo: arte desfocada ao fundo ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  padding-block: clamp(40px, 6vw, 88px) clamp(40px, 5vw, 72px);
+}
+
+.hero__bg {
+  position: absolute;
+  inset: -40px;
+  width: calc(100% + 80px);
+  height: calc(100% + 80px);
+  object-fit: cover;
+  filter: blur(36px) saturate(1.3);
+  opacity: 0.5;
+  z-index: -2;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgb(18 9 35 / 0.55), var(--night) 96%),
+    radial-gradient(60% 80% at 75% 40%, transparent, rgb(18 9 35 / 0.6));
+}
+
+.hero__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 72px);
+}
+
+.hero__text {
+  display: grid;
+  justify-items: start;
+  gap: 16px;
 }
 
 .back {
-  display: inline-block;
-  margin-bottom: 20px;
-  padding: 8px 12px;
-  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--mid);
+  font-weight: 600;
   text-decoration: none;
-  color: var(--ink);
-  background: var(--white);
-  border-radius: 6px;
 }
 
-.project__banner {
-  --lift: 10px;
-  --lift-color: var(--ink);
+.back:hover {
+  color: var(--hi);
 }
 
-.project__banner img {
-  width: 100%;
-  max-height: 520px;
-  object-fit: cover;
-  background: var(--ink);
-}
-
-.project__main {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 24px 64px;
-  padding-top: clamp(40px, 5vw, 64px);
-}
-
-.project__title {
+.hero__title {
   font-size: var(--step-4);
   font-stretch: 75%;
+  line-height: 0.92;
+  text-wrap: balance;
 }
 
-.project__tagline {
-  margin-top: 12px;
+.hero__tag {
   font-size: var(--step-1);
-  color: var(--muted);
-  max-width: 44ch;
+  line-height: 1.4;
+  color: #d9d0f2;
+  max-width: 36ch;
 }
 
-.project__side {
-  grid-row: span 2;
-  display: grid;
-  align-content: start;
-  gap: 24px;
-}
-
-.facts {
-  display: grid;
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
   gap: 14px;
-  margin: 0;
-  padding: 20px;
-  background: var(--white);
-  border-left: 6px solid var(--accent);
+  margin-top: 12px;
+}
+
+.hero__actions:empty {
+  display: none;
+}
+
+.hero__art img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 2px var(--accent),
+    0 40px 100px -30px var(--accent);
+}
+
+/* ---------- ficha e texto ---------- */
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 32px;
+  margin: 8px 0 0;
+  padding-top: 18px;
+  border-top: 1px solid rgb(255 255 255 / 0.12);
 }
 
 .facts dt {
   font-size: var(--step--1);
-  color: var(--muted);
+  color: var(--mid);
 }
 
 .facts dd {
@@ -203,41 +256,37 @@ function open(src) {
   font-weight: 700;
 }
 
-.facts:not(:has(div)) {
-  display: none;
-}
-
-.project__body {
+.info {
   display: grid;
   gap: 1em;
-  max-width: 68ch;
+  max-width: calc(66ch + 2 * var(--gutter));
+  margin-inline: max(0px, calc((100% - var(--max)) / 2));
   font-size: 1.125rem;
+  color: #ddd5f3;
 }
 
+/* ---------- blocos ---------- */
 .block {
-  padding-top: clamp(48px, 6vw, 80px);
+  padding-top: clamp(56px, 7vw, 96px);
 }
 
 .project {
-  padding-bottom: clamp(64px, 8vw, 112px);
+  padding-bottom: clamp(72px, 9vw, 128px);
 }
 
 .block__title {
   font-size: var(--step-3);
-  margin-bottom: 24px;
+  font-stretch: 80%;
+  margin-bottom: 28px;
 }
 
 .video {
-  --lift: 10px;
-  --lift-color: var(--accent);
-}
-
-.video iframe {
   display: block;
   width: 100%;
   aspect-ratio: 16 / 9;
   border: 0;
-  background: var(--ink);
+  border-radius: 12px;
+  background: var(--night-2);
 }
 
 .gallery {
@@ -245,7 +294,7 @@ function open(src) {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
   gap: 16px;
 }
 
@@ -254,16 +303,42 @@ function open(src) {
   width: 100%;
   padding: 0;
   border: 0;
-  background: var(--ink);
-  cursor: zoom-in;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
+  background: var(--night-2);
+  cursor: zoom-in;
 }
 
 .gallery__item img {
   width: 100%;
   aspect-ratio: 16 / 9;
   object-fit: cover;
+  transition: transform 400ms ease;
+}
+
+.gallery__item:hover img {
+  transform: scale(1.04);
+}
+
+.more {
+  margin-top: clamp(16px, 3vw, 32px);
+}
+
+.more__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.more__all {
+  color: var(--mid);
+  font-weight: 700;
+}
+
+.more__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
 }
 
 .viewer {
@@ -274,12 +349,13 @@ function open(src) {
 }
 
 .viewer::backdrop {
-  background: rgb(36 16 74 / 0.88);
+  background: rgb(18 9 35 / 0.9);
 }
 
 .viewer img {
   max-height: 84vh;
   margin: 0 auto;
+  border-radius: 8px;
 }
 
 .viewer__close {
@@ -287,13 +363,17 @@ function open(src) {
   display: flex;
 }
 
-@media (max-width: 820px) {
-  .project__main {
+@media (max-width: 900px) {
+  .hero__grid {
     grid-template-columns: 1fr;
   }
 
-  .project__side {
-    grid-row: auto;
+  .hero__art {
+    order: -1;
+  }
+
+  .more__grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>

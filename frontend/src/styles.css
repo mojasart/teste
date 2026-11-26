@@ -25,6 +25,13 @@
   --step-3: clamp(2.1rem, 4vw, 2.6rem);
   --step-4: clamp(2.8rem, 8vw, 5.6rem);
 
+  /* parte escura do site (abaixo do hero) */
+  --night: #120923;
+  --night-2: #1b1033;
+  --night-3: #261747;
+  --hi: #f3eeff;
+  --mid: #a99bd0;
+
   --cut: 18px;            /* tamanho do chanfro */
   --gutter: clamp(16px, 4vw, 40px);
   --max: 1200px;
@@ -49,6 +56,40 @@ body {
   background: var(--paper);
   font-variation-settings: 'wdth' 100;
   -webkit-font-smoothing: antialiased;
+}
+
+/* site público: escuro; o painel continua claro */
+body.night {
+  background: var(--night);
+  color: var(--hi);
+}
+
+body.night .input {
+  background: var(--night-2);
+  color: var(--hi);
+  border-color: var(--night-3);
+}
+
+body.night .input:focus {
+  border-color: var(--byte);
+}
+
+body.night .field small {
+  color: var(--mid);
+}
+
+/* pílula de informação (tipo, destaque) */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-size: var(--step--1);
+  font-weight: 700;
+  color: var(--hi);
+  background: rgb(141 75 235 / 0.28);
+  border: 1px solid rgb(141 75 235 / 0.6);
+  border-radius: 999px;
 }
 
 img {

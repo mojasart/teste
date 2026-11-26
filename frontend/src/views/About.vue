@@ -8,7 +8,7 @@ const body = computed(() => paragraphs(site.settings?.about_text))
 
 <template>
   <section class="about wrap">
-    <div class="about__mark" aria-hidden="true"><BrandMark gap="var(--paper)" ink="var(--byte)" shade="var(--line)" /></div>
+    <div class="about__mark" aria-hidden="true"><BrandMark gap="var(--night)" ink="var(--byte)" shade="var(--night-3)" /></div>
     <div>
       <h1 class="about__title">Sobre o estúdio</h1>
       <div class="about__body">
@@ -32,7 +32,7 @@ const body = computed(() => paragraphs(site.settings?.about_text))
   font-size: var(--step-4);
   font-stretch: 75%;
   color: var(--byte);
-  text-shadow: 0.05em 0.06em 0 var(--line);
+  text-shadow: 0.05em 0.06em 0 var(--night-3);
 }
 
 .about__body {
@@ -41,6 +41,7 @@ const body = computed(() => paragraphs(site.settings?.about_text))
   max-width: 64ch;
   margin: 28px 0 36px;
   font-size: 1.15rem;
+  color: #ddd5f3;
 }
 
 @media (max-width: 720px) {

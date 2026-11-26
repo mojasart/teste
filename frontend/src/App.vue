@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import SiteHeader from './components/SiteHeader.vue'
 import SiteFooter from './components/SiteFooter.vue'
@@ -8,6 +8,7 @@ import { loadSettings } from './api.js'
 const route = useRoute()
 const isAdmin = computed(() => route.path.startsWith('/admin'))
 loadSettings()
+watchEffect(() => document.body.classList.toggle('night', !isAdmin.value))
 </script>
 
 <template>

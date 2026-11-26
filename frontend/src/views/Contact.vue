@@ -32,8 +32,8 @@ async function submit() {
       </p>
     </div>
 
-    <div v-if="status === 'sent'" class="sent lift">
-      <div class="sent__inner chamfer">
+    <div v-if="status === 'sent'" class="sent">
+      <div class="sent__inner">
         <h2>Mensagem enviada.</h2>
         <p>Respondemos no e-mail {{ form.email }}.</p>
       </div>
@@ -94,16 +94,20 @@ async function submit() {
   font-size: 1.125rem;
 }
 
+.contact__intro {
+  color: #ddd5f3;
+}
+
 .contact__intro a {
   font-weight: 700;
-  color: var(--byte-deep);
+  color: var(--hi);
 }
 
 .contact__title {
   font-size: var(--step-4);
   font-stretch: 75%;
   color: var(--byte);
-  text-shadow: 0.05em 0.06em 0 var(--line);
+  text-shadow: 0.05em 0.06em 0 var(--night-3);
   margin-bottom: 8px;
 }
 
@@ -121,7 +125,8 @@ async function submit() {
   display: grid;
   gap: 8px;
   padding: 36px;
-  background: var(--white);
+  background: var(--night-2);
+  border: 1px solid var(--night-3);
 }
 
 .sent h2 {

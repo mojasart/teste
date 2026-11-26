@@ -2,9 +2,9 @@
 import { computed, onMounted, ref } from 'vue'
 import { api, site } from '../api.js'
 import BrandMark from '../components/BrandMark.vue'
-import ProjectCard from '../components/ProjectCard.vue'
+import ProjectTile from '../components/ProjectTile.vue'
 import Conveyor from '../components/Conveyor.vue'
-import BlockEdge from '../components/BlockEdge.vue'
+import PixelEdge from '../components/PixelEdge.vue'
 
 const projects = ref([])
 const loading = ref(true)
@@ -21,7 +21,7 @@ onMounted(async () => {
 })
 
 const featured = computed(() => projects.value.find((p) => p.featured) || projects.value[0])
-const rest = computed(() => projects.value.filter((p) => p !== featured.value).slice(0, 6))
+const rest = computed(() => projects.value.filter((p) => p !== featured.value).slice(0, 8))
 const s = computed(() => site.settings || {})
 const stats = computed(() =>
   [
@@ -49,48 +49,69 @@ const stats = computed(() =>
     </div>
     <Conveyor class="hero__belt" :projects="projects" />
   </section>
-  <BlockEdge v-if="!stats.length" />
+  <PixelEdge />
 
-  <section v-if="stats.length" class="stats" aria-label="Números do estúdio">
-    <dl class="wrap stats__row">
+  <section v-if="stats.length" class="stats wrap" aria-label="Números do estúdio">
+    <dl class="stats__row">
       <div v-for="[value, label] in stats" :key="label">
         <dt>{{ label }}</dt>
         <dd>{{ value }}</dd>
       </div>
     </dl>
   </section>
-  <BlockEdge v-if="stats.length" color="var(--ink)" shade="#120726" />
 
-  <section class="work wrap" aria-labelledby="titulo-projetos">
-    <div class="work__head">
-      <h2 id="titulo-projetos">Projetos</h2>
-      <RouterLink v-if="projects.length > 1" to="/projetos" class="work__all">Ver todos</RouterLink>
-    </div>
+  <p v-if="loading" class="wrap state">Carregando projetos…</p>
+  <p v-else-if="failed" class="wrap state">Não deu para carregar os projetos agora. Recarregue a página.</p>
 
-    <p v-if="loading" class="work__state">Carregando projetos…</p>
-    <p v-else-if="failed" class="work__state">Não deu para carregar os projetos agora. Recarregue a página.</p>
-    <template v-else-if="featured">
-      <ProjectCard v-reveal :project="featured" wide />
-      <div class="work__grid">
-        <ProjectCard v-for="(p, i) in rest" :key="p.id" v-reveal="i % 3" :project="p" />
-        <RouterLink v-if="projects.length > rest.length + 1" v-reveal="rest.length % 3" to="/projetos" class="soon soon--link">
-          <span class="soon__count">+{{ projects.length - rest.length - 1 }}</span>
-          <span class="soon__title">Ver todos os {{ projects.length }} projetos</span>
-        </RouterLink>
-        <div v-else v-reveal="rest.length % 3" class="soon">
-          <p class="soon__title">Mais projetos chegando</p>
-          <p>Siga a gente para saber dos próximos lançamentos.</p>
+  <template v-else-if="featured">
+    <section class="wrap feature" aria-label="Lançamento em destaque">
+      <RouterLink v-reveal :to="`/projetos/${featured.slug}`" class="feature__card" :style="{ '--accent': featured.accent_color }">
+        <div class="feature__media">
+          <img class="feature__img" :src="featured.banner_image || featured.cover_image" :alt="`Arte do ${featured.title}`" />
         </div>
-      </div>
-    </template>
-    <p v-else class="work__state">Os primeiros projetos aparecem aqui em breve.</p>
-  </section>
+        <div class="feature__body">
+          <div class="feature__text">
+            <span class="pill">Lançamento em destaque</span>
+            <h2 class="feature__title">{{ featured.title }}</h2>
+            <p v-if="featured.tagline" class="feature__tag">{{ featured.tagline }}</p>
+          </div>
+          <span class="btn">Ver projeto</span>
+        </div>
+      </RouterLink>
+    </section>
 
-  <BlockEdge up :seed="23" shade="transparent" />
-  <section class="cta">
-    <div class="wrap cta__inner">
-      <h2>Tem uma ideia para o Minecraft?</h2>
-      <p>Fazemos addons, mapas e experiências sob encomenda para marcas e criadores.</p>
+    <section class="wrap work" aria-labelledby="titulo-projetos">
+      <header class="work__head">
+        <h2 id="titulo-projetos" class="work__title">Projetos</h2>
+        <p class="work__lead">
+          {{ projects.length }} addons para o Minecraft Bedrock, de máquinas e automação a magia e exploração.
+        </p>
+      </header>
+
+      <div class="work__grid">
+        <ProjectTile
+          v-for="(p, i) in rest"
+          :key="p.id"
+          v-reveal="i < 2 ? i : (i - 2) % 3"
+          :project="p"
+          :big="i < 2"
+          :class="i < 2 ? 'span-6' : 'span-4'"
+        />
+      </div>
+
+      <div class="work__more">
+        <RouterLink to="/projetos" class="btn btn--purple">Ver todos os {{ projects.length }} projetos</RouterLink>
+      </div>
+    </section>
+  </template>
+
+  <section class="wrap cta">
+    <div v-reveal class="cta__box">
+      <div class="cta__mark" aria-hidden="true"><BrandMark gap="var(--byte)" /></div>
+      <div class="cta__text">
+        <h2>Tem uma ideia para o Minecraft?</h2>
+        <p>Fazemos addons sob encomenda para marcas, criadores e servidores.</p>
+      </div>
       <RouterLink to="/contato" class="btn">Falar com o estúdio</RouterLink>
     </div>
   </section>
@@ -144,17 +165,18 @@ const stats = computed(() =>
   width: 100%;
 }
 
-.stats {
-  background: var(--ink);
-  color: var(--white);
+.state {
+  padding-block: 64px;
+  color: var(--mid);
+  font-size: var(--step-1);
 }
 
 .stats__row {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px 56px;
-  margin: 0 auto;
-  padding-block: 28px;
+  gap: 16px 64px;
+  margin: 0;
+  padding-block: 40px 8px;
 }
 
 .stats__row div {
@@ -172,97 +194,142 @@ const stats = computed(() =>
 }
 
 .stats dt {
-  color: #d9cdf5;
+  color: var(--mid);
 }
 
+/* ---------- destaque ---------- */
+.feature {
+  padding-top: clamp(40px, 6vw, 72px);
+}
+
+.feature__card {
+  display: grid;
+  overflow: hidden;
+  border-radius: 12px;
+  color: var(--hi);
+  text-decoration: none;
+  background: var(--night-2);
+  border: 1px solid var(--night-3);
+  box-shadow: 0 40px 120px -50px var(--accent);
+  transition: box-shadow 300ms ease, border-color 300ms ease;
+}
+
+.feature__card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 40px 140px -40px var(--accent);
+}
+
+.feature__media {
+  aspect-ratio: 3 / 1;
+  overflow: hidden;
+}
+
+.feature__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.feature__card:hover .feature__img {
+  transform: scale(1.03);
+}
+
+.feature__body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 40px;
+  padding: clamp(20px, 3vw, 32px) clamp(20px, 3.5vw, 40px);
+}
+
+.feature__text {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+}
+
+.feature__title {
+  font-size: var(--step-3);
+  font-stretch: 75%;
+  line-height: 1;
+}
+
+.feature__tag {
+  color: var(--mid);
+  font-size: var(--step-0);
+}
+
+/* ---------- projetos ---------- */
 .work {
-  padding-block: clamp(40px, 6vw, 72px) clamp(56px, 8vw, 96px);
+  padding-block: clamp(72px, 9vw, 128px) clamp(56px, 8vw, 96px);
 }
 
 .work__head {
-  display: flex;
-  align-items: baseline;
+  display: grid;
+  grid-template-columns: auto minmax(0, 420px);
   justify-content: space-between;
-  margin-bottom: 32px;
+  align-items: end;
+  gap: 16px 48px;
+  margin-bottom: 48px;
 }
 
-.work__head h2 {
-  font-size: var(--step-3);
+.work__title {
+  font-size: var(--step-4);
+  font-stretch: 75%;
+  line-height: 0.9;
 }
 
-.work__all {
-  font-weight: 700;
-  color: var(--byte-deep);
-}
-
-.work__state {
-  color: var(--muted);
+.work__lead {
+  color: var(--mid);
   font-size: var(--step-1);
+  line-height: 1.4;
 }
 
 .work__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-  gap: 40px 32px;
-  margin-top: 48px;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 48px 28px;
 }
 
-.soon {
-  display: grid;
-  align-content: center;
-  gap: 8px;
-  min-height: 220px;
-  padding: 28px;
-  border: 3px dashed var(--line);
-  color: var(--muted);
-  clip-path: none;
-  border-radius: 0;
+.span-6 {
+  grid-column: span 6;
 }
 
-.soon--link {
-  border: 3px solid var(--byte);
-  background: var(--byte);
-  color: var(--white);
-  text-decoration: none;
-  box-shadow: 8px 8px 0 var(--byte-deep);
-  transition: transform 120ms ease, box-shadow 120ms ease;
+.span-4 {
+  grid-column: span 4;
 }
 
-.soon--link:hover {
-  transform: translate(-3px, -3px);
-  box-shadow: 11px 11px 0 var(--byte-deep);
+.work__more {
+  display: flex;
+  justify-content: center;
+  margin-top: 64px;
 }
 
-.soon--link .soon__title {
-  color: var(--white);
-}
-
-.soon__count {
-  font-size: var(--step-4);
-  font-weight: 800;
-  font-stretch: 75%;
-  line-height: 0.9;
-  text-shadow: 0.05em 0.06em 0 var(--byte-deep);
-}
-
-.soon__title {
-  font-weight: 800;
-  font-stretch: 80%;
-  font-size: var(--step-1);
-  color: var(--ink);
-}
-
+/* ---------- chamada ---------- */
 .cta {
-  margin-top: 0;
-  background: var(--byte);
-  color: var(--white);
+  padding-bottom: clamp(72px, 9vw, 128px);
 }
 
-.cta__inner {
+.cta__box {
   display: grid;
-  justify-items: start;
-  gap: 16px;
-  padding-block: clamp(48px, 7vw, 88px);
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 32px;
+  padding: clamp(28px, 4vw, 48px);
+  background: var(--byte);
+  border-radius: 12px;
+  box-shadow: 10px 10px 0 var(--byte-deep);
+}
+
+.cta__mark {
+  width: 88px;
+}
+
+.cta__text {
+  display: grid;
+  gap: 6px;
 }
 
 .cta h2 {
@@ -271,10 +338,20 @@ const stats = computed(() =>
 }
 
 .cta p {
-  max-width: 52ch;
   font-size: var(--step-1);
   line-height: 1.4;
-  margin-bottom: 12px;
+}
+
+@media (max-width: 900px) {
+  .span-6,
+  .span-4 {
+    grid-column: span 12;
+  }
+
+  .work__head,
+  .cta__box {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 760px) {
