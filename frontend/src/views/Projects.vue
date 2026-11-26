@@ -122,7 +122,7 @@ function pick(slug) {
 }
 
 .list {
-  padding-block: clamp(32px, 5vw, 56px) clamp(72px, 9vw, 128px);
+  padding-block: clamp(32px, 5vw, 56px) clamp(40px, 5vw, 64px);
 }
 
 .filters {

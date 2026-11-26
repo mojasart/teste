@@ -227,11 +227,15 @@ const stats = computed(() =>
 }
 
 .feature__media {
-  aspect-ratio: 16 / 9;
+  position: relative;
+  min-height: 300px;
   overflow: hidden;
 }
 
+/* a arte preenche toda a altura do cartão, sem faixa vazia */
 .feature__img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -258,7 +262,7 @@ const stats = computed(() =>
 }
 
 .feature__title {
-  font-size: clamp(2.2rem, 4vw, 3.4rem);
+  font-size: clamp(2rem, 3.4vw, 3rem);
   font-stretch: 75%;
   line-height: 1;
 }
@@ -316,7 +320,7 @@ const stats = computed(() =>
 
 /* ---------- chamada ---------- */
 .cta {
-  padding-bottom: clamp(72px, 9vw, 128px);
+  padding-bottom: clamp(40px, 5vw, 64px);
 }
 
 .cta__box {
@@ -364,6 +368,11 @@ const stats = computed(() =>
   .work__head,
   .cta__box {
     grid-template-columns: 1fr;
+  }
+
+  .feature__media {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
   }
 }
 

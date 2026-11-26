@@ -267,7 +267,7 @@ function open(src) {
 
 /* ---------- blocos ---------- */
 .project {
-  padding-bottom: clamp(72px, 9vw, 128px);
+  padding-bottom: clamp(40px, 5vw, 64px);
 }
 
 .block {

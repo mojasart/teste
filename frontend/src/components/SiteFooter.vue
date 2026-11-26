@@ -5,6 +5,7 @@ import { site } from '../api.js'
 import BrandMark from './BrandMark.vue'
 import PartnerBadge from './PartnerBadge.vue'
 import SocialIcons from './SocialIcons.vue'
+import PixelEdge from './PixelEdge.vue'
 import logo from '../assets/logo-horizontal.png'
 
 const email = computed(() => site.settings?.contact_email)
@@ -17,6 +18,7 @@ const showTouch = computed(() => route.path !== '/contact')
 
 <template>
   <footer class="footer">
+    <PixelEdge top="var(--night)" bottom="var(--foot)" :seed="31" :rows="4" />
     <section class="wrap touch" :aria-labelledby="showTouch ? 'get-in-touch' : undefined">
       <template v-if="showTouch">
       <h2 id="get-in-touch" class="touch__title">Get in touch</h2>
@@ -83,16 +85,19 @@ const showTouch = computed(() => route.path !== '/contact')
 
 <style scoped>
 .footer {
-  padding-top: clamp(56px, 7vw, 96px);
-  background: var(--night);
-  border-top: 1px solid var(--night-3);
+  --foot: #0b0516;
+  background: var(--foot);
   overflow: hidden;
+}
+
+.touch {
+  padding-top: clamp(28px, 4vw, 48px);
 }
 
 .touch__title {
   font-size: var(--step-3);
   font-stretch: 80%;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 
 .touch__grid {
@@ -107,9 +112,15 @@ const showTouch = computed(() => route.path !== '/contact')
   flex-direction: column;
   gap: 10px;
   padding: 28px;
-  background: var(--night-2);
+  background: #160b2b;
   border: 1px solid var(--night-3);
   border-radius: 14px;
+  transition: border-color 200ms ease, transform 200ms ease;
+}
+
+.card:hover {
+  border-color: var(--byte);
+  transform: translateY(-3px);
 }
 
 .card__icon {
@@ -159,16 +170,14 @@ const showTouch = computed(() => route.path !== '/contact')
   flex-wrap: wrap;
   align-items: center;
   gap: 20px 32px;
-  margin-top: clamp(40px, 5vw, 64px);
-  padding-block: 24px;
-  border-top: 1px solid var(--night-3);
+  margin-top: 28px;
+  padding-block: 20px 28px;
   font-size: var(--step--1);
   color: var(--mid);
 }
 
 .legal--alone {
   margin-top: 0;
-  border-top: 0;
 }
 
 .legal__text {
