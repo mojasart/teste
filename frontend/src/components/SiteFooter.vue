@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { site } from '../api.js'
 import BrandMark from './BrandMark.vue'
 import logo from '../assets/logo-horizontal.png'
+import PartnerBadge from './PartnerBadge.vue'
 
 const socials = computed(() => {
   const s = site.settings || {}
@@ -14,6 +15,7 @@ const socials = computed(() => {
   ].filter(([, url]) => url)
 })
 const email = computed(() => site.settings?.contact_email)
+const discord = computed(() => site.settings?.social_discord)
 const year = new Date().getFullYear()
 </script>
 
@@ -32,8 +34,10 @@ const year = new Date().getFullYear()
         </div>
         <div class="touch__item">
           <h3>Need a hand?</h3>
-          <p>Questions about an add-on you bought? Send us a message and we will help you out.</p>
-          <RouterLink to="/contact" class="btn btn--small btn--ghost">Get support</RouterLink>
+          <p v-if="discord">Questions about an add-on you bought? Our Discord is the fastest way to get help.</p>
+          <p v-else>Questions about an add-on you bought? Send us a message and we will help you out.</p>
+          <a v-if="discord" :href="discord" target="_blank" rel="noopener" class="btn btn--small btn--ghost">Join our Discord</a>
+          <RouterLink v-else to="/contact" class="btn btn--small btn--ghost">Get support</RouterLink>
         </div>
         <div class="touch__item">
           <h3>Our add-ons</h3>
@@ -43,7 +47,8 @@ const year = new Date().getFullYear()
       </div>
 
       <div class="legal">
-        <p>
+        <PartnerBadge small class="legal__badge" />
+        <p class="legal__text">
           © {{ year }} PurpleByte Studios. All rights reserved.<br />
           Minecraft is a trademark of Mojang Studios and Microsoft.
         </p>
@@ -121,6 +126,14 @@ const year = new Date().getFullYear()
   border-top: 2px solid var(--byte);
   font-size: var(--step--1);
   color: var(--mid);
+}
+
+.legal__badge {
+  color: var(--hi);
+}
+
+.legal__text {
+  flex: 1;
 }
 
 .legal__social {

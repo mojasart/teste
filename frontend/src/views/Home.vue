@@ -5,6 +5,7 @@ import BrandMark from '../components/BrandMark.vue'
 import ProjectTile from '../components/ProjectTile.vue'
 import Conveyor from '../components/Conveyor.vue'
 import PixelEdge from '../components/PixelEdge.vue'
+import PartnerBadge from '../components/PartnerBadge.vue'
 
 const projects = ref([])
 const loading = ref(true)
@@ -42,6 +43,7 @@ const stats = computed(() =>
           <RouterLink to="/projects" class="btn">See our projects</RouterLink>
           <RouterLink to="/contact" class="btn btn--ghost">Work with us</RouterLink>
         </div>
+        <PartnerBadge class="hero__badge" />
       </div>
       <div class="hero__mark" aria-hidden="true">
         <BrandMark animate spin />
@@ -157,6 +159,10 @@ const stats = computed(() =>
   flex-wrap: wrap;
   gap: 14px;
   margin-top: 36px;
+}
+
+.hero__badge {
+  margin-top: 28px;
 }
 
 .hero__mark {
@@ -359,7 +365,11 @@ const stats = computed(() =>
     grid-template-columns: 1fr;
   }
 
-  .hero__mark {
+  .hero__badge {
+  margin-top: 28px;
+}
+
+.hero__mark {
     order: -1;
     max-width: 150px;
     justify-self: start;

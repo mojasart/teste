@@ -47,5 +47,5 @@ We love tech and utility add-ons: machines, storage, automation and the small to
   ('contact_email',  ''),
   ('social_twitter', ''),
   ('social_youtube', 'https://www.youtube.com/@PurpleByteCreations'),
-  ('social_discord', ''),
+  ('social_discord', 'https://discord.gg/kXeNcRWmbe'),
   ('social_instagram', '');
