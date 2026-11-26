@@ -53,6 +53,9 @@ onBeforeUnmount(() => clearTimeout(timer))
         :loading="n === 0 ? 'eager' : 'lazy'"
       />
 
+      <!-- clicar em qualquer parte da imagem abre a página do addon -->
+      <RouterLink :to="`/addons/${addon.slug}`" class="screen__link" tabindex="-1" aria-hidden="true"></RouterLink>
+
       <div class="screen__info">
         <span v-if="addon.badge" class="screen__badge display">{{ addon.badge }}</span>
         <h1 class="screen__title display">{{ addon.title }}</h1>
@@ -126,7 +129,17 @@ onBeforeUnmount(() => clearTimeout(timer))
     linear-gradient(90deg, rgb(20 15 28 / 0.6), transparent 55%);
 }
 
+.screen__link {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  cursor: pointer;
+}
+
 .screen__info {
+  position: relative;
+  z-index: 1;
+  justify-self: start;
   display: grid;
   justify-items: start;
   gap: 10px;
@@ -171,6 +184,7 @@ onBeforeUnmount(() => clearTimeout(timer))
 /* miniaturas das imagens do addon, no canto inferior direito */
 .thumbs {
   position: absolute;
+  z-index: 1;
   right: calc(var(--cut) + clamp(14px, 2vw, 28px));
   bottom: clamp(22px, 3vw, 40px);
   display: flex;

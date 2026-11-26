@@ -29,7 +29,7 @@ const shots = computed(() => gallery.length)
   <FeatureHero :addon="featured" @trailer="trailer = $event" />
 
   <section v-if="others.length" id="premium" class="wrap premium" aria-labelledby="premium-title">
-    <SectionHead id="premium-title">Premium Add-ons</SectionHead>
+    <SectionHead id="premium-title">Featured Add-ons</SectionHead>
     <div class="premium__list">
       <AddonRow v-for="(a, n) in others" :key="a.slug" v-reveal :addon="a" :flip="n % 2 === 1" />
     </div>
@@ -61,7 +61,10 @@ const shots = computed(() => gallery.length)
 </template>
 
 <style scoped>
-.premium,
+.premium {
+  padding-top: clamp(32px, 4vw, 56px);
+}
+
 .gallery,
 .free {
   padding-top: clamp(64px, 8vw, 110px);
