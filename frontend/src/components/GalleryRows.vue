@@ -27,6 +27,8 @@ const rows = computed(() => {
       <svg v-else viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5l11 7-11 7z" /></svg>
     </button>
 
+    <div class="belt">
+    <span class="belt__rail" aria-hidden="true"></span>
     <div v-for="(row, r) in rows" :key="r" class="grows__row" :class="{ 'grows__row--rev': r % 2 }">
       <ul class="grows__track" :style="{ animationDuration: `${row.length * 4.5}s` }">
         <li v-for="(it, k) in row" :key="k" :aria-hidden="k >= row.length / 2">
@@ -37,6 +39,8 @@ const rows = computed(() => {
         </li>
       </ul>
     </div>
+    <span class="belt__rail belt__rail--rev" aria-hidden="true"></span>
+    </div>
 
     <Lightbox v-model:index="open" :items="items" />
   </div>
@@ -45,14 +49,18 @@ const rows = computed(() => {
 <style scoped>
 .grows {
   position: relative;
-  display: grid;
-  gap: 10px;
+  padding-block: 22px;
+}
+
+.grows .belt {
+  overflow: hidden;
 }
 
 .grows__pause {
   position: absolute;
   right: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
-  top: -60px;
+  top: -40px;
+  z-index: 2;
   display: grid;
   place-items: center;
   width: 36px;
@@ -67,6 +75,37 @@ const rows = computed(() => {
   width: 18px;
   height: 18px;
   fill: currentColor;
+}
+
+/* esteira de fábrica: faixa inclinada com trilhos correndo em cima e embaixo */
+.belt {
+  display: grid;
+  gap: 10px;
+  margin-inline: -4vw;
+  padding-block: 4px;
+  background: #140f1c;
+  transform: rotate(-2deg);
+}
+
+.belt__rail {
+  height: 12px;
+  background: repeating-linear-gradient(90deg, #3a2d4d 0 20px, #251b33 20px 28px);
+  background-size: 28px 100%;
+  animation: rail 0.8s linear infinite;
+}
+
+.belt__rail--rev {
+  animation-direction: reverse;
+}
+
+.grows--paused .belt__rail {
+  animation-play-state: paused;
+}
+
+@keyframes rail {
+  to {
+    background-position: -28px 0;
+  }
 }
 
 .grows__row {

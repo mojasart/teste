@@ -12,7 +12,8 @@ const premium = addonsData.premium.map((a) => ({
   trailer: asset(a.trailer),
   gallery: a.gallery.map((g) => ({ ...g, src: asset(g.src), thumb: asset(g.thumb) })),
 }))
-const free = addonsData.free.map((a) => ({ ...a, icon: asset(a.icon) }))
+// grátis sem página própria levam à lista de addons da PurpleByte no Vatonage
+const free = addonsData.free.map((a) => ({ ...a, icon: asset(a.icon), link: a.link || siteData.freeMoreUrl }))
 
 export const content = { premium, free }
 export const site = siteData

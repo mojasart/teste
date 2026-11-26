@@ -3,7 +3,6 @@ import { site } from '../content.js'
 import x from '../assets/social/x.svg'
 import discord from '../assets/social/discord.svg'
 import youtube from '../assets/social/youtube.png'
-import vatonage from '../assets/social/vatonage-mark.webp'
 
 // logos oficiais de cada marca; só aparecem os que têm link no painel
 const props = defineProps({ small: { type: Boolean, default: false } })
@@ -12,7 +11,6 @@ const links = [
   ['X', x, s.x],
   ['Discord', discord, s.discord],
   ['YouTube', youtube, s.youtube],
-  ['Vatonage', vatonage, s.vatonage],
 ].filter(([, , url]) => url)
 </script>
 
