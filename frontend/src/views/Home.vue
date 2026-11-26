@@ -3,7 +3,7 @@ import { computed, ref } from 'vue'
 import { content, site } from '../content.js'
 import Launcher from '../components/Launcher.vue'
 import GalleryRows from '../components/GalleryRows.vue'
-import Inventory from '../components/Inventory.vue'
+import Hotbar from '../components/Hotbar.vue'
 import SectionHead from '../components/SectionHead.vue'
 import VideoModal from '../components/VideoModal.vue'
 
@@ -40,13 +40,13 @@ const shots = computed(() => gallery.length)
       Free Content
       <template #side>
         <a :href="site.freeMoreUrl" target="_blank" rel="noopener" class="btn btn--accent btn--small">
-          All free add-ons
+          More
           <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2.4" /></svg>
         </a>
       </template>
     </SectionHead>
-    <p class="lead">Free add-ons made by our team. Pick one to download it.</p>
-    <Inventory :items="free" />
+    <p class="lead">Free add-ons made by our team. Pick one to download it, or see them all with More.</p>
+    <Hotbar :items="free" />
   </section>
 
   <VideoModal :src="trailer?.trailer || ''" :title="`${trailer?.title} trailer`" @close="trailer = null" />
