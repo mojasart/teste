@@ -3,6 +3,8 @@ import { computed, onMounted, ref } from 'vue'
 import { api, site } from '../api.js'
 import BrandMark from '../components/BrandMark.vue'
 import ProjectCard from '../components/ProjectCard.vue'
+import Conveyor from '../components/Conveyor.vue'
+import BlockEdge from '../components/BlockEdge.vue'
 
 const projects = ref([])
 const loading = ref(true)
@@ -42,10 +44,12 @@ const stats = computed(() =>
         </div>
       </div>
       <div class="hero__mark" aria-hidden="true">
-        <BrandMark animate />
+        <BrandMark animate spin />
       </div>
     </div>
+    <Conveyor class="hero__belt" :projects="projects" />
   </section>
+  <BlockEdge v-if="!stats.length" />
 
   <section v-if="stats.length" class="stats" aria-label="Números do estúdio">
     <dl class="wrap stats__row">
@@ -55,6 +59,7 @@ const stats = computed(() =>
       </div>
     </dl>
   </section>
+  <BlockEdge v-if="stats.length" color="var(--ink)" shade="#120726" />
 
   <section class="work wrap" aria-labelledby="titulo-projetos">
     <div class="work__head">
@@ -65,10 +70,14 @@ const stats = computed(() =>
     <p v-if="loading" class="work__state">Carregando projetos…</p>
     <p v-else-if="failed" class="work__state">Não deu para carregar os projetos agora. Recarregue a página.</p>
     <template v-else-if="featured">
-      <ProjectCard :project="featured" wide />
+      <ProjectCard v-reveal :project="featured" wide />
       <div class="work__grid">
-        <ProjectCard v-for="p in rest" :key="p.id" :project="p" />
-        <div class="soon chamfer">
+        <ProjectCard v-for="(p, i) in rest" :key="p.id" v-reveal="i % 3" :project="p" />
+        <RouterLink v-if="projects.length > rest.length + 1" v-reveal="rest.length % 3" to="/projetos" class="soon soon--link">
+          <span class="soon__count">+{{ projects.length - rest.length - 1 }}</span>
+          <span class="soon__title">Ver todos os {{ projects.length }} projetos</span>
+        </RouterLink>
+        <div v-else v-reveal="rest.length % 3" class="soon">
           <p class="soon__title">Mais projetos chegando</p>
           <p>Siga a gente para saber dos próximos lançamentos.</p>
         </div>
@@ -77,6 +86,7 @@ const stats = computed(() =>
     <p v-else class="work__state">Os primeiros projetos aparecem aqui em breve.</p>
   </section>
 
+  <BlockEdge up :seed="23" shade="transparent" />
   <section class="cta">
     <div class="wrap cta__inner">
       <h2>Tem uma ideia para o Minecraft?</h2>
@@ -90,8 +100,13 @@ const stats = computed(() =>
 .hero {
   background: var(--byte);
   color: var(--white);
-  padding: clamp(32px, 6vw, 72px) 0 clamp(56px, 9vw, 112px);
+  padding: clamp(32px, 6vw, 72px) 0 0;
   overflow: hidden;
+}
+
+.hero__belt {
+  margin-top: clamp(48px, 7vw, 88px);
+  margin-bottom: clamp(20px, 3vw, 36px);
 }
 
 .hero__grid {
@@ -161,7 +176,7 @@ const stats = computed(() =>
 }
 
 .work {
-  padding-block: clamp(56px, 8vw, 96px);
+  padding-block: clamp(40px, 6vw, 72px) clamp(56px, 8vw, 96px);
 }
 
 .work__head {
@@ -204,6 +219,32 @@ const stats = computed(() =>
   border-radius: 0;
 }
 
+.soon--link {
+  border: 3px solid var(--byte);
+  background: var(--byte);
+  color: var(--white);
+  text-decoration: none;
+  box-shadow: 8px 8px 0 var(--byte-deep);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+
+.soon--link:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 11px 11px 0 var(--byte-deep);
+}
+
+.soon--link .soon__title {
+  color: var(--white);
+}
+
+.soon__count {
+  font-size: var(--step-4);
+  font-weight: 800;
+  font-stretch: 75%;
+  line-height: 0.9;
+  text-shadow: 0.05em 0.06em 0 var(--byte-deep);
+}
+
 .soon__title {
   font-weight: 800;
   font-stretch: 80%;
@@ -212,6 +253,7 @@ const stats = computed(() =>
 }
 
 .cta {
+  margin-top: 0;
   background: var(--byte);
   color: var(--white);
 }

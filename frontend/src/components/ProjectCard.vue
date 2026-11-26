@@ -11,7 +11,7 @@ defineProps({
       <div class="card__media">
         <img
           v-if="project.cover_image || project.banner_image"
-          :src="project.cover_image || project.banner_image"
+          :src="wide ? project.banner_image || project.cover_image : project.cover_image || project.banner_image"
           :alt="''"
           loading="lazy"
         />
@@ -58,12 +58,18 @@ defineProps({
 .card__media {
   aspect-ratio: 16 / 9;
   background: var(--ink);
+  overflow: hidden;
 }
 
 .card__media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.card:hover .card__media img {
+  transform: scale(1.06);
 }
 
 .card__body {
@@ -90,7 +96,7 @@ defineProps({
 @media (min-width: 860px) {
   .card--wide .card__inner {
     display: grid;
-    grid-template-columns: 1.6fr 1fr;
+    grid-template-columns: 2.2fr 1fr;
   }
 
   .card--wide .card__media {

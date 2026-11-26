@@ -1,4 +1,5 @@
 <script setup>
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 // Marca da PurpleByte em SVG: quadro partido em 4 peças + engrenagem.
 // Com "animate", as peças encaixam e a engrenagem trava girando 45°.
 const props = defineProps({
@@ -7,7 +8,21 @@ const props = defineProps({
   ink: { type: String, default: '#fff' }, // cor da marca
   shade: { type: String, default: 'var(--byte-deep)' }, // sombra dura
   title: { type: String, default: 'PurpleByte Studios' },
+  spin: { type: Boolean, default: false }, // engrenagem gira com a rolagem
 })
+
+const turn = ref(0)
+let raf = 0
+const onScroll = () => {
+  cancelAnimationFrame(raf)
+  raf = requestAnimationFrame(() => (turn.value = window.scrollY * 0.25))
+}
+onMounted(() => {
+  if (props.spin && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    addEventListener('scroll', onScroll, { passive: true })
+  }
+})
+onBeforeUnmount(() => removeEventListener('scroll', onScroll))
 
 const uid = Math.random().toString(36).slice(2, 8)
 
@@ -77,8 +92,14 @@ const pieces = [
     </g>
 
     <g class="mark__gear">
-      <path :d="gear" :fill="shade" fill-rule="evenodd" transform="translate(-2.5 3)" />
-      <path :d="gear" :fill="ink" fill-rule="evenodd" :stroke="gap" stroke-width="3" paint-order="stroke" />
+      <g transform="translate(-2.5 3)">
+        <g class="mark__spin" :style="{ transform: `rotate(${turn}deg)` }">
+          <path :d="gear" :fill="shade" fill-rule="evenodd" />
+        </g>
+      </g>
+      <g class="mark__spin" :style="{ transform: `rotate(${turn}deg)` }">
+        <path :d="gear" :fill="ink" fill-rule="evenodd" :stroke="gap" stroke-width="3" paint-order="stroke" />
+      </g>
     </g>
   </svg>
 </template>
@@ -91,7 +112,8 @@ const pieces = [
   overflow: visible;
 }
 
-.mark__gear {
+.mark__gear,
+.mark__spin {
   transform-box: view-box;
   transform-origin: 50px 50px;
 }
