@@ -1,0 +1,5 @@
+node_modules/
+backend/.env
+backend/public/dist/
+.DS_Store
+demo-dist/

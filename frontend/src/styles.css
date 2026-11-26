@@ -1,0 +1,344 @@
+/* PurpleByte Studios
+   Site público: roxo bem escuro, engrenagens apagadas no fundo, títulos em Barlow Condensed.
+   Painel (/admin): claro, com os mesmos tokens de marca. */
+
+@font-face {
+  font-family: 'Barlow Condensed';
+  src: url('./assets/fonts/barlow-condensed.woff2') format('woff2');
+  font-weight: 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Barlow';
+  src: url('./assets/fonts/barlow-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Barlow';
+  src: url('./assets/fonts/barlow-semibold.woff2') format('woff2');
+  font-weight: 600;
+  font-display: swap;
+}
+
+:root {
+  /* marca */
+  --byte: #8d4beb;
+  --byte-deep: #5e2ca8;
+  --brass: #f5b82e;
+  --brass-deep: #b57a0c;
+
+  /* site público */
+  --bg: #1c1724;
+  --bg-2: #241d2f;
+  --panel: #2b2238;
+  --panel-hi: #352a46;
+  --header: #1f1829;
+  --hi: #f6f2fb;
+  --mid: #b6abc6;
+  --accent: #7d55b8;
+  --accent-hi: #9468d6;
+  --rule: #e9e3f2;
+
+  /* painel */
+  --ink: #24104a;
+  --paper: #f4f0ff;
+  --white: #ffffff;
+  --muted: #5f4f80;
+  --line: #d9cdf5;
+  --danger: #c0264a;
+  --ok: #1f7a4d;
+
+  --font: 'Barlow', 'Segoe UI', system-ui, sans-serif;
+  --display: 'Barlow Condensed', 'Arial Narrow', 'Barlow', sans-serif;
+
+  --step--1: 0.875rem;
+  --step-0: 1rem;
+  --step-1: 1.3rem;
+  --step-2: 1.75rem;
+  --step-3: clamp(2rem, 3.6vw, 2.6rem);
+  --step-4: clamp(2.8rem, 7vw, 5.4rem);
+
+  --gutter: clamp(16px, 3.2vw, 44px);
+  --max: 1240px;
+  --header-h: 76px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 12px);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: var(--step-0);
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* site público */
+body.site {
+  color: var(--hi);
+  background-color: var(--bg);
+}
+
+html.lock {
+  overflow: hidden;
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  line-height: 1.05;
+}
+
+p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--brass);
+  outline-offset: 3px;
+}
+
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.display {
+  font-family: var(--display);
+  font-weight: 700;
+  letter-spacing: 0.005em;
+}
+
+/* ---------- botões ---------- */
+.btn {
+  --btn-bg: var(--brass);
+  --btn-fg: var(--ink);
+  --btn-shadow: var(--brass-deep);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  min-height: 46px;
+  padding: 0.65em 1.3em;
+  font: inherit;
+  font-weight: 600;
+  color: var(--btn-fg);
+  background: var(--btn-bg);
+  border: 0;
+  border-radius: 4px;
+  box-shadow: 0 4px 0 var(--btn-shadow);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 100ms ease, box-shadow 100ms ease, background-color 150ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 var(--btn-shadow);
+}
+
+.btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 var(--btn-shadow);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn--light {
+  --btn-bg: var(--hi);
+  --btn-fg: #1c1527;
+  --btn-shadow: #8f84a3;
+}
+
+.btn--accent {
+  --btn-bg: var(--accent);
+  --btn-fg: var(--white);
+  --btn-shadow: #4f3378;
+}
+
+.btn--ghost {
+  --btn-bg: transparent;
+  --btn-fg: currentColor;
+  --btn-shadow: transparent;
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
+.btn--ghost:hover,
+.btn--ghost:active {
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
+.btn--purple {
+  --btn-bg: var(--byte);
+  --btn-fg: var(--white);
+  --btn-shadow: var(--byte-deep);
+}
+
+.btn--danger {
+  --btn-bg: var(--danger);
+  --btn-fg: var(--white);
+  --btn-shadow: #7d1530;
+}
+
+.btn--small {
+  min-height: 36px;
+  padding: 0.35em 0.9em;
+  font-size: var(--step--1);
+}
+
+/* ---------- formulários ---------- */
+.field {
+  display: grid;
+  gap: 6px;
+}
+
+.field > span {
+  font-weight: 600;
+  font-size: var(--step--1);
+}
+
+.field small {
+  color: var(--muted);
+  font-size: var(--step--1);
+}
+
+.field .error {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+.input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 14px;
+  font: inherit;
+  color: var(--ink);
+  background: var(--white);
+  border: 2px solid var(--line);
+  border-radius: 6px;
+}
+
+textarea.input {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.input:focus {
+  border-color: var(--byte);
+  outline: none;
+  box-shadow: 0 0 0 3px rgb(141 75 235 / 0.25);
+}
+
+.input[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+
+body.site .input {
+  color: var(--hi);
+  background: var(--bg-2);
+  border-color: var(--panel-hi);
+}
+
+body.site .input:focus {
+  border-color: var(--accent-hi);
+}
+
+body.site .field small {
+  color: var(--mid);
+}
+
+body.site .field .error {
+  color: #ff7d98;
+}
+
+.notice {
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.notice--error {
+  background: #fde8ee;
+  color: var(--danger);
+}
+
+.notice--ok {
+  background: #e2f5ea;
+  color: var(--ok);
+}
+
+/* ---------- v-reveal ---------- */
+.will-reveal {
+  opacity: 0;
+}
+
+.will-reveal.is-in {
+  opacity: 1;
+  animation: rise 640ms cubic-bezier(0.2, 0.8, 0.2, 1) var(--delay, 0ms) backwards;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .will-reveal {
+    opacity: 1;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
