@@ -3,11 +3,12 @@ import vue from '@vitejs/plugin-vue'
 
 // build: vai para backend/public/dist, servido pelo index.php
 // dev:   npm run dev (porta 5173) + php -S na 8000 para a API
-export default defineConfig(({ command }) => ({
+// demo: npm run build -- --mode demo → demo-dist/, sem PHP (dados de src/demo/)
+export default defineConfig(({ command, mode }) => ({
   plugins: [vue()],
-  base: command === 'build' ? '/dist/' : '/',
+  base: mode === 'demo' ? './' : command === 'build' ? '/dist/' : '/',
   build: {
-    outDir: '../backend/public/dist',
+    outDir: mode === 'demo' ? 'demo-dist' : '../backend/public/dist',
     emptyOutDir: true,
   },
   server: {

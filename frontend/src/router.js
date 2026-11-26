@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createMemoryHistory, createRouter, createWebHistory } from 'vue-router'
 import { admin } from './api.js'
 
 const routes = [
@@ -24,7 +24,8 @@ const routes = [
 ]
 
 export const router = createRouter({
-  history: createWebHistory('/'),
+  // a demonstração roda dentro de uma página sem servidor: navegação em memória
+  history: import.meta.env.VITE_DEMO ? createMemoryHistory() : createWebHistory('/'),
   routes,
   scrollBehavior: (to, from, saved) => saved || (to.path !== from.path ? { top: 0 } : undefined),
 })

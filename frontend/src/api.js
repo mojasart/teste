@@ -21,7 +21,12 @@ export const admin = reactive({
   },
 })
 
-export async function api(path, { method = 'GET', body, form } = {}) {
+export async function api(path, opts = {}) {
+  if (import.meta.env.VITE_DEMO) return (await import('./demo/demoApi.js')).demoApi(path, opts)
+  return realApi(path, opts)
+}
+
+async function realApi(path, { method = 'GET', body, form } = {}) {
   const headers = {}
   if (body !== undefined) headers['Content-Type'] = 'application/json'
   if (method !== 'GET' && admin.user) headers['X-CSRF-Token'] = admin.user.csrf
