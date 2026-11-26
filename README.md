@@ -2,7 +2,7 @@
 
 Site da PurpleByte Studios: addons premium e grátis para o Minecraft: Bedrock Edition.
 
-- `imagens/`: acervo original (zip de assets e imagens antigas). O site usa as cópias em `backend/public/media/`.
+- `imagens/`: todas as imagens e o trailer. O site lê direto daqui (endereços `/media/...`).
 - `site bom antigo/`: a primeira versão do site, guardada para referência.
 
 - **Frontend:** Vue 3 + Vite (`frontend/`)
@@ -14,7 +14,6 @@ Site da PurpleByte Studios: addons premium e grátis para o Minecraft: Bedrock E
 backend/
   public/        ← pasta pública (o que o navegador acessa)
     index.php    ← entrada única: /api → PHP, o resto → app Vue
-    media/       ← imagens que vêm com o site (Fabricate)
     uploads/     ← imagens enviadas pelo painel
     dist/        ← frontend compilado (gerado pelo npm run build)
   src/           ← código da API
@@ -86,7 +85,7 @@ Precisa de PHP 8.2+, Node 20+ e MariaDB/MySQL.
 3. Abra o phpMyAdmin da hospedagem, selecione o banco e importe `database/schema.sql` e depois `database/seed.sql`.
 4. Pelo gerenciador de arquivos ou FTP, envie:
    - o **conteúdo** de `backend/public/` para `public_html/`
-   - as pastas `backend/src/` e `backend/bin/` para a pasta **acima** de `public_html` (assim o código da API não fica acessível pelo navegador)
+   - as pastas `backend/src/`, `backend/bin/` e `imagens/` para a pasta **acima** de `public_html` (assim o código da API não fica acessível pelo navegador; as imagens são entregues pelo `index.php`)
    - um arquivo `.env` (copie de `backend/.env.example`, com os dados do banco e `APP_ENV=production`), também na pasta acima de `public_html`
 
    No fim, fica assim:
@@ -95,7 +94,8 @@ Precisa de PHP 8.2+, Node 20+ e MariaDB/MySQL.
    ~/.env
    ~/src/
    ~/bin/
-   ~/public_html/index.php, .htaccess, dist/, media/, uploads/
+   ~/imagens/
+   ~/public_html/index.php, .htaccess, dist/, uploads/
    ```
 
 5. Crie o usuário do painel. Se a hospedagem tiver terminal (SSH):

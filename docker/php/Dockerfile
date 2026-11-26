@@ -16,5 +16,6 @@ RUN docker-php-ext-install pdo_mysql \
 WORKDIR /var/www
 COPY backend/ backend/
 COPY database/ database/
+COPY imagens/ imagens/
 COPY --from=front /app/backend/public/dist backend/public/dist
 RUN mkdir -p backend/public/uploads && chown -R www-data:www-data backend/public/uploads

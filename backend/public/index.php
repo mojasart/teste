@@ -11,9 +11,19 @@ use App\{Addons, Auth, Contact, Db, Http, HttpError, Router, Settings, Uploads};
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 
+// pasta das imagens do site: imagens/ na raiz do projeto (no repositório) ou
+// ao lado de src/ (na hospedagem); MEDIA_DIR no .env força outro caminho
+require dirname(__DIR__) . '/src/bootstrap.php';
+define('MEDIA_DIR', env('MEDIA_DIR') ?: (is_dir(dirname(__DIR__, 2) . '/imagens') ? dirname(__DIR__, 2) . '/imagens' : dirname(__DIR__) . '/imagens'));
+
 // servidor embutido do PHP (dev): entrega arquivos que existem direto
 if (PHP_SAPI === 'cli-server' && $path !== '/' && is_file(__DIR__ . $path)) {
     return false;
+}
+
+// /media/... vem direto da pasta imagens/ do repositório (acervo da PurpleByte)
+if (str_starts_with($path, '/media/')) {
+    serveMedia(substr($path, 7));
 }
 
 if (!str_starts_with($path, '/api/') && $path !== '/api') {
@@ -27,8 +37,6 @@ if (!str_starts_with($path, '/api/') && $path !== '/api') {
     readfile($app);
     exit;
 }
-
-require dirname(__DIR__) . '/src/bootstrap.php';
 
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: strict-origin-when-cross-origin');
@@ -85,4 +93,54 @@ try {
 } catch (Throwable $e) {
     error_log((string) $e);
     Http::json(['error' => APP_DEBUG ? $e->getMessage() : 'Server error. Please try again in a moment.'], 500);
+}
+
+/** Entrega um arquivo de imagens/ (com cache e suporte a Range, para o vídeo poder avançar). */
+function serveMedia(string $rel): never
+{
+    $types = ['webp' => 'image/webp', 'png' => 'image/png', 'jpg' => 'image/jpeg', 'jpeg' => 'image/jpeg',
+              'gif' => 'image/gif', 'svg' => 'image/svg+xml', 'mp4' => 'video/mp4', 'webm' => 'video/webm'];
+    $base = realpath(MEDIA_DIR);
+    $file = $base ? realpath($base . '/' . rawurldecode($rel)) : false;
+    $ext = $file ? strtolower(pathinfo($file, PATHINFO_EXTENSION)) : '';
+    if (!$file || !str_starts_with($file, $base . DIRECTORY_SEPARATOR) || !is_file($file) || !isset($types[$ext])) {
+        http_response_code(404);
+        exit;
+    }
+
+    $size = filesize($file);
+    $start = 0;
+    $end = $size - 1;
+    header('Content-Type: ' . $types[$ext]);
+    header('Cache-Control: public, max-age=604800');
+    header('Accept-Ranges: bytes');
+    header('X-Content-Type-Options: nosniff');
+
+    if (preg_match('/^bytes=(\d*)-(\d*)$/', $_SERVER['HTTP_RANGE'] ?? '', $m) && ($m[1] !== '' || $m[2] !== '')) {
+        if ($m[1] === '') {
+            $start = max(0, $size - (int) $m[2]);
+        } else {
+            $start = (int) $m[1];
+            $end = $m[2] === '' ? $end : min($end, (int) $m[2]);
+        }
+        if ($start > $end || $start >= $size) {
+            http_response_code(416);
+            header("Content-Range: bytes */$size");
+            exit;
+        }
+        http_response_code(206);
+        header("Content-Range: bytes $start-$end/$size");
+    }
+    header('Content-Length: ' . ($end - $start + 1));
+
+    $fp = fopen($file, 'rb');
+    fseek($fp, $start);
+    $left = $end - $start + 1;
+    while ($left > 0 && !feof($fp)) {
+        $chunk = fread($fp, min(65536, $left));
+        echo $chunk;
+        $left -= strlen($chunk);
+    }
+    fclose($fp);
+    exit;
 }
