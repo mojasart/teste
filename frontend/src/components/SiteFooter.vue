@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { site } from '../api.js'
 import BrandMark from './BrandMark.vue'
+import logo from '../assets/logo-horizontal.png'
 
 const socials = computed(() => {
   const s = site.settings || {}
@@ -60,7 +61,7 @@ const year = new Date().getFullYear()
           <RouterLink to="/about">About</RouterLink>
           <RouterLink to="/contact">Contact</RouterLink>
         </nav>
-        <p class="slab__name">PurpleByte<br />Studios</p>
+        <img class="slab__logo" :src="logo" alt="PurpleByte Studios" width="656" height="241" />
         <div class="slab__mark" aria-hidden="true"><BrandMark spin /></div>
       </div>
     </div>
@@ -153,16 +154,13 @@ const year = new Date().getFullYear()
   overflow: hidden;
 }
 
-.slab__name {
+.slab__logo {
   position: absolute;
   top: clamp(24px, 4vw, 40px);
   left: clamp(24px, 4vw, 40px);
-  font-size: clamp(2.4rem, 6vw, 4.4rem);
-  font-weight: 800;
-  font-stretch: 75%;
-  line-height: 0.9;
-  color: var(--white);
-  text-shadow: 0.05em 0.06em 0 var(--byte-deep);
+  width: clamp(220px, 30vw, 380px);
+  height: auto;
+  filter: drop-shadow(4px 5px 0 var(--byte-deep));
 }
 
 .slab__nav {

@@ -31,6 +31,10 @@ VALUES
   ('diagonal-fences', 'Diagonal Fences', 'Fences that connect diagonally.', '', @addon, '/media/addons/diagonal-fences.webp', '/media/addons/diagonal-fences.webp', JSON_ARRAY(), '#C9A15B', 0, 1, 15),
   ('items-transporter', 'Items Transporter', 'Pipes that move items from chest to chest.', '', @addon, '/media/addons/items-transporter.webp', '/media/addons/items-transporter.webp', JSON_ARRAY(), '#C9B98A', 0, 1, 16);
 
+-- trailer do Fabricate no YouTube
+UPDATE addons SET trailer_url = 'https://www.youtube.com/watch?v=prfqg2kU4uA'
+ WHERE slug = 'fabricate' AND trailer_url = '';
+
 INSERT IGNORE INTO settings (`key`, `value`) VALUES
   ('hero_title',    'We build worlds for Minecraft.'),
   ('hero_subtitle', 'PurpleByte Studios makes add-ons for the Minecraft Marketplace, from machines and automation to magic and exploration.'),
@@ -42,6 +46,6 @@ We love tech and utility add-ons: machines, storage, automation and the small to
   ('stat_years',     ''),
   ('contact_email',  ''),
   ('social_twitter', ''),
-  ('social_youtube', ''),
+  ('social_youtube', 'https://www.youtube.com/@PurpleByteCreations'),
   ('social_discord', ''),
   ('social_instagram', '');

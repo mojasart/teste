@@ -31,6 +31,7 @@ watch(
   { immediate: true }
 )
 
+const demo = !!import.meta.env.VITE_DEMO
 const art = computed(() => project.value?.banner_image || project.value?.cover_image)
 const video = computed(() => youtubeId(project.value?.trailer_url))
 const body = computed(() => paragraphs(project.value?.description))
@@ -95,7 +96,13 @@ function open(src) {
     </div>
 
     <section v-if="video" id="trailer" class="wrap block" aria-label="Trailer">
+      <!-- na demonstração (sem servidor) o YouTube não pode ser embutido: vira um link -->
+      <a v-if="demo" :href="project.trailer_url" target="_blank" rel="noopener" class="video video--link">
+        <img v-if="art" :src="art" alt="" />
+        <span class="video__play">Watch the trailer on YouTube</span>
+      </a>
       <iframe
+        v-else
         class="video"
         :src="`https://www.youtube-nocookie.com/embed/${video}`"
         :title="`${project.title} trailer`"
@@ -280,6 +287,43 @@ function open(src) {
   border: 0;
   border-radius: 12px;
   background: var(--night-2);
+}
+
+.video--link {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+.video--link img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.45) blur(2px);
+}
+
+.video__play {
+  position: relative;
+  padding: 16px 24px 16px 56px;
+  font-weight: 800;
+  color: var(--white);
+  background: #e0262b;
+  border-radius: 10px;
+}
+
+.video__play::before {
+  content: '';
+  position: absolute;
+  left: 22px;
+  top: 50%;
+  translate: 0 -50%;
+  border-left: 16px solid var(--white);
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
 }
 
 .gallery {

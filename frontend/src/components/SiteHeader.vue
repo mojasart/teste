@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import BrandMark from './BrandMark.vue'
+import logo from '../assets/logo-horizontal.png'
 
 const open = ref(false)
 const route = useRoute()
@@ -18,8 +18,7 @@ const links = [
   <header class="header">
     <div class="wrap header__bar">
       <RouterLink to="/" class="brand" aria-label="PurpleByte Studios home">
-        <span class="brand__mark"><BrandMark /></span>
-        <span class="brand__name">PurpleByte <span>Studios</span></span>
+        <img class="brand__logo" :src="logo" alt="PurpleByte Studios" width="656" height="241" />
       </RouterLink>
 
       <button
@@ -65,21 +64,9 @@ const links = [
   text-decoration: none;
 }
 
-.brand__mark {
-  width: 42px;
-}
-
-.brand__name {
-  font-weight: 800;
-  font-stretch: 78%;
-  font-size: 1.45rem;
-  line-height: 1;
-  letter-spacing: -0.01em;
-}
-
-.brand__name span {
-  font-weight: 500;
-  font-stretch: 100%;
+.brand__logo {
+  width: auto;
+  height: 44px;
 }
 
 .nav {
