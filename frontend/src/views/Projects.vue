@@ -50,7 +50,7 @@ function pick(slug) {
       </p>
     </div>
   </section>
-  <PixelEdge :seed="5" :rows="14" animate />
+  <PixelEdge :seed="5" :rows="24" :spread="1.6" animate />
 
   <section class="wrap list">
     <div v-if="usedCategories.length > 1" class="filters" role="group" aria-label="Filter by type">
@@ -95,7 +95,7 @@ function pick(slug) {
   align-items: end;
   justify-content: space-between;
   gap: 16px 48px;
-  padding-block: clamp(40px, 6vw, 80px) 8px;
+  padding-block: clamp(40px, 6vw, 80px) clamp(48px, 6vw, 88px);
 }
 
 .top__title {

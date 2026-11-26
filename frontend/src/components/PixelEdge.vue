@@ -7,6 +7,7 @@ const props = defineProps({
   seed: { type: Number, default: 11 },
   rows: { type: Number, default: 6 },
   animate: { type: Boolean, default: false },
+  spread: { type: Number, default: 2.2 },
 })
 const cell = 16
 const cols = 160 // 2560px
@@ -15,9 +16,10 @@ const rand = () => ((s = (s * 9301 + 49297) % 233280) / 233280)
 const cells = []
 for (let r = 0; r < props.rows; r++) {
   const t = (r + 0.5) / props.rows
-  const chance = Math.pow(1 - t, 2.2) + 0.025
+  // denso em cima, rarefeito embaixo; "spread" estica a cauda de pixels soltos
+  const chance = Math.pow(1 - t, props.spread) + 0.02
   for (let c = 0; c < cols; c++) {
-    if (rand() < chance) cells.push({ x: c * cell, y: r * cell, d: Math.round(r * 95 + rand() * 520) })
+    if (rand() < chance) cells.push({ x: c * cell, y: r * cell, d: Math.round(r * 85 + rand() * 600) })
   }
 }
 </script>
@@ -29,6 +31,7 @@ for (let r = 0; r < props.rows; r++) {
     :style="{ height: `${rows * cell}px` }"
     :viewBox="`0 0 ${cols * cell} ${rows * cell}`"
     preserveAspectRatio="xMidYMin slice"
+    shape-rendering="crispEdges"
     aria-hidden="true"
   >
     <rect :width="cols * cell" :height="rows * cell" :fill="bottom" />
@@ -65,7 +68,7 @@ for (let r = 0; r < props.rows; r++) {
 
 @media (max-width: 600px) {
   .pixels {
-    max-height: 96px;
+    max-height: 200px;
   }
 }
 </style>
