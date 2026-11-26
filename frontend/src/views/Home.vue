@@ -23,6 +23,12 @@ onMounted(async () => {
 
 const featured = computed(() => projects.value.find((p) => p.featured) || projects.value[0])
 const rest = computed(() => projects.value.filter((p) => p !== featured.value).slice(0, 8))
+// artes usadas no bento do estúdio (escolhe por slug, cai pra qualquer uma se não achar)
+const art = (slug, i) => {
+  const p = projects.value.find((x) => x.slug === slug) || projects.value[i]
+  return p ? p.cover_image || p.banner_image : ''
+}
+const discord = computed(() => site.settings?.social_discord)
 const s = computed(() => site.settings || {})
 const stats = computed(() =>
   [
@@ -101,21 +107,43 @@ const stats = computed(() =>
         />
       </div>
 
-      <div class="work__more">
-        <RouterLink to="/projects" class="btn btn--purple">View all {{ projects.length }} projects</RouterLink>
-      </div>
     </section>
   </template>
 
-  <section class="wrap cta">
-    <div v-reveal class="cta__box">
-      <div class="cta__mark" aria-hidden="true"><BrandMark gap="var(--byte)" /></div>
-      <div class="cta__text">
-        <h2>Have an idea for Minecraft?</h2>
-        <p>We build custom add-ons for brands, creators and servers.</p>
-      </div>
-      <RouterLink to="/contact" class="btn">Work with us</RouterLink>
+  <!-- bento do estúdio: blocos de texto + artes -->
+  <section v-if="projects.length" class="wrap studio" aria-label="About the studio">
+    <div v-reveal="0" class="studio__block studio__block--purple">
+      <h2>Made by players, for players</h2>
+      <p>A team of builders, artists and developers making add-ons for Minecraft: Bedrock Edition. Every add-on is tested in our own worlds before it ships.</p>
+      <RouterLink to="/about" class="btn btn--ghost">Who we are</RouterLink>
     </div>
+    <RouterLink v-reveal="1" to="/projects/waystones" class="studio__art" aria-label="Waystones">
+      <img :src="art('waystones', 0)" alt="" loading="lazy" />
+    </RouterLink>
+    <RouterLink v-reveal="0" to="/projects/basic-machinery" class="studio__art" aria-label="Basic Machinery">
+      <img :src="art('basic-machinery', 1)" alt="" loading="lazy" />
+    </RouterLink>
+    <div v-reveal="1" class="studio__block studio__block--brass">
+      <h2>Work with us</h2>
+      <p>Custom add-ons, brand partnerships and collaborations for the Minecraft Marketplace.</p>
+      <RouterLink to="/contact" class="btn btn--dark">Get in touch</RouterLink>
+    </div>
+  </section>
+
+  <!-- fechamento: dois blocos grandes clicáveis -->
+  <section class="wrap big">
+    <RouterLink v-reveal="0" to="/projects" class="big__tile big__tile--purple">
+      <span class="big__label">Explore all {{ projects.length || '' }} add-ons</span>
+      <svg class="big__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" /></svg>
+    </RouterLink>
+    <a v-if="discord" v-reveal="1" :href="discord" target="_blank" rel="noopener" class="big__tile big__tile--dark">
+      <span class="big__label">Join our Discord</span>
+      <svg class="big__icon big__icon--fill" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.6 1.3a18.4 18.4 0 0 0-5.6 0L8.6 3a19.7 19.7 0 0 0-4.9 1.5C.6 9.1-.3 13.7.1 18.2a19.9 19.9 0 0 0 6 3l1.3-2.1a13 13 0 0 1-2-1l.5-.4a14.2 14.2 0 0 0 12.2 0l.5.4c-.6.4-1.3.7-2 1l1.3 2.1a19.8 19.8 0 0 0 6-3c.5-5.2-.9-9.7-3.6-13.8zM8 15.4c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4zm8 0c-1.2 0-2.2-1.1-2.2-2.4s1-2.4 2.2-2.4 2.2 1.1 2.2 2.4-1 2.4-2.2 2.4z" /></svg>
+    </a>
+    <RouterLink v-else v-reveal="1" to="/contact" class="big__tile big__tile--dark">
+      <span class="big__label">Work with us</span>
+      <svg class="big__icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h14M13 6l6 6-6 6" /></svg>
+    </RouterLink>
   </section>
 </template>
 
@@ -312,45 +340,159 @@ const stats = computed(() =>
   grid-column: span 4;
 }
 
-.work__more {
+/* ---------- bento do estúdio ---------- */
+.studio {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 20px;
+  padding-bottom: 20px;
+}
+
+.studio > :nth-child(1),
+.studio > :nth-child(4) {
+  grid-column: span 5;
+}
+
+.studio > :nth-child(2),
+.studio > :nth-child(3) {
+  grid-column: span 7;
+}
+
+.studio__block {
   display: flex;
-  justify-content: center;
-  margin-top: 64px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+  padding: clamp(24px, 3.5vw, 40px);
+  border-radius: 16px;
 }
 
-/* ---------- chamada ---------- */
-.cta {
-  padding-bottom: clamp(40px, 5vw, 64px);
+.studio__block h2 {
+  font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+  font-stretch: 75%;
+  line-height: 0.95;
+  text-wrap: balance;
 }
 
-.cta__box {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 32px;
-  padding: clamp(28px, 4vw, 48px);
+.studio__block p {
+  max-width: 38ch;
+  margin-bottom: auto;
+  padding-bottom: 12px;
+  font-size: 1.05rem;
+  line-height: 1.45;
+}
+
+.studio__block--purple {
+  color: var(--white);
   background: var(--byte);
-  border-radius: 12px;
-  box-shadow: 10px 10px 0 var(--byte-deep);
+  box-shadow: 6px 6px 0 var(--byte-deep);
 }
 
-.cta__mark {
-  width: 88px;
-}
-
-.cta__text {
-  display: grid;
-  gap: 6px;
-}
-
-.cta h2 {
-  font-size: var(--step-3);
+.studio__block--purple h2 {
   text-shadow: 0.05em 0.06em 0 var(--byte-deep);
 }
 
-.cta p {
-  font-size: var(--step-1);
-  line-height: 1.4;
+.studio__block--brass {
+  color: var(--ink);
+  background: var(--brass);
+  box-shadow: 6px 6px 0 var(--brass-deep);
+}
+
+.btn--dark {
+  --btn-bg: var(--ink);
+  --btn-fg: var(--white);
+  --btn-shadow: #0b0516;
+}
+
+.studio__art {
+  display: block;
+  min-height: 260px;
+  overflow: hidden;
+  border-radius: 16px;
+  background: var(--night-2);
+}
+
+.studio__art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.studio__art:hover img {
+  transform: scale(1.05);
+}
+
+/* ---------- fechamento ---------- */
+.big {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  padding-block: 20px clamp(48px, 6vw, 80px);
+}
+
+.big__tile {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: clamp(150px, 16vw, 210px);
+  padding: clamp(22px, 3vw, 34px);
+  border-radius: 16px;
+  text-decoration: none;
+  color: var(--white);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.big__tile--purple {
+  background: var(--byte);
+  box-shadow: 6px 6px 0 var(--byte-deep);
+}
+
+.big__tile--dark {
+  background: #5865f2;
+  box-shadow: 6px 6px 0 #3a43b5;
+}
+
+.big__tile:hover {
+  transform: translate(-3px, -3px);
+}
+
+.big__tile--purple:hover {
+  box-shadow: 9px 9px 0 var(--byte-deep);
+}
+
+.big__tile--dark:hover {
+  box-shadow: 9px 9px 0 #3a43b5;
+}
+
+.big__label {
+  max-width: 12ch;
+  font-size: clamp(1.9rem, 3.6vw, 3rem);
+  font-weight: 800;
+  font-stretch: 75%;
+  line-height: 0.95;
+  text-shadow: 0.05em 0.06em 0 rgb(0 0 0 / 0.2);
+}
+
+.big__icon {
+  flex: none;
+  width: clamp(36px, 4vw, 52px);
+  height: auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: square;
+  transition: transform 160ms ease;
+}
+
+.big__icon--fill {
+  fill: currentColor;
+  stroke: none;
+}
+
+.big__tile:hover .big__icon {
+  transform: translateX(4px);
 }
 
 @media (max-width: 900px) {
@@ -366,8 +508,17 @@ const stats = computed(() =>
 
   .feature__card,
   .work__head,
-  .cta__box {
+  .big {
     grid-template-columns: 1fr;
+  }
+
+  .studio > * {
+    grid-column: span 12 !important;
+  }
+
+  .studio__art {
+    min-height: 0;
+    aspect-ratio: 16 / 9;
   }
 
   .feature__media {

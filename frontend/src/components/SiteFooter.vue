@@ -13,7 +13,7 @@ const discord = computed(() => site.settings?.social_discord)
 const year = new Date().getFullYear()
 // na página de contato o formulário já cumpre esse papel
 const route = useRoute()
-const showTouch = computed(() => route.path !== '/contact')
+const showTouch = computed(() => !['/', '/contact'].includes(route.path))
 </script>
 
 <template>
