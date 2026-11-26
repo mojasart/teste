@@ -13,9 +13,19 @@ watch(open, (v) => document.documentElement.classList.toggle('drawer-open', v))
 const onKey = (e) => {
   if (e.key === 'Escape') open.value = false
 }
-onMounted(() => addEventListener('keydown', onKey))
+
+// ao rolar, o cabeçalho se solta do topo e vira uma barra flutuante
+const floating = ref(false)
+const onScroll = () => (floating.value = window.scrollY > 40)
+
+onMounted(() => {
+  addEventListener('keydown', onKey)
+  addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
+})
 onBeforeUnmount(() => {
   removeEventListener('keydown', onKey)
+  removeEventListener('scroll', onScroll)
   document.documentElement.classList.remove('drawer-open')
 })
 
@@ -27,7 +37,7 @@ const links = [
 </script>
 
 <template>
-  <header class="header">
+  <header class="header" :class="{ 'header--float': floating }">
     <div class="wrap header__bar">
       <RouterLink to="/" class="brand" aria-label="PurpleByte Studios home">
         <img class="brand__logo" :src="logo" alt="PurpleByte Studios" width="656" height="241" />
@@ -79,10 +89,12 @@ const links = [
 
 <style scoped>
 .header {
-  background: var(--byte);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  height: 76px;
   color: var(--white);
-  position: relative;
-  z-index: 20;
+  background: var(--byte);
 }
 
 .header__bar {
@@ -90,6 +102,41 @@ const links = [
   align-items: center;
   justify-content: space-between;
   min-height: 76px;
+  border-radius: 0;
+  transition:
+    min-height 260ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    margin 260ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    border-radius 260ms ease,
+    box-shadow 260ms ease;
+}
+
+/* solto do topo: barra flutuante com sombra dura, seguindo a rolagem */
+.header--float {
+  background: transparent;
+}
+
+.header--float .header__bar {
+  width: calc(100% - 2 * clamp(12px, 3vw, 28px));
+  max-width: calc(var(--max) + 16px);
+  min-height: 60px;
+  margin-top: 10px;
+  padding-inline: clamp(14px, 2vw, 22px);
+  background: var(--byte);
+  border-radius: 14px;
+  box-shadow:
+    0 6px 0 var(--byte-deep),
+    0 24px 48px -16px rgb(10 4 24 / 0.7);
+  animation: drop 320ms cubic-bezier(0.2, 1.3, 0.4, 1);
+}
+
+.header--float .brand__logo {
+  height: 38px;
+}
+
+@keyframes drop {
+  from {
+    transform: translateY(-120%);
+  }
 }
 
 .brand {
@@ -269,8 +316,17 @@ const links = [
 }
 
 @media (max-width: 680px) {
+  .header {
+    height: 64px;
+  }
+
   .header__bar {
     min-height: 64px;
+  }
+
+  .header--float .header__bar {
+    min-height: 54px;
+    margin-top: 8px;
   }
 
   .brand__logo {
