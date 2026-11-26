@@ -34,7 +34,7 @@ const links = [
           <SocialIcons small />
           <a v-if="site.social.discord" :href="site.social.discord" target="_blank" rel="noopener" class="btn btn--light btn--small">Join our Discord</a>
         </div>
-        <div class="slab__mark" aria-hidden="true"><BrandMark spin /></div>
+        <div class="slab__mark" aria-hidden="true"><BrandMark spin gap="var(--slab)" shade="var(--slab-deep)" /></div>
       </div>
       <p class="legal">© {{ year }} PurpleByte LLC. Minecraft is a trademark of Mojang Studios and Microsoft.</p>
     </div>
@@ -47,6 +47,8 @@ const links = [
 }
 
 .slab {
+  --slab: #5b2aa6;
+  --slab-deep: #3b1873;
   position: relative;
   display: grid;
   gap: 22px;
@@ -54,9 +56,9 @@ const links = [
   padding-right: clamp(24px, 30%, 420px);
   overflow: hidden;
   color: var(--white);
-  background: var(--byte);
+  background: var(--slab);
   border-radius: 14px 14px 0 0;
-  box-shadow: inset 0 -6px 0 var(--byte-deep);
+  box-shadow: inset 0 -6px 0 var(--slab-deep);
 }
 
 .slab__top {
@@ -68,7 +70,7 @@ const links = [
 .slab__logo {
   width: clamp(170px, 22vw, 260px);
   height: auto;
-  filter: drop-shadow(3px 4px 0 var(--byte-deep));
+  filter: drop-shadow(3px 4px 0 var(--slab-deep));
 }
 
 .slab__badge {
