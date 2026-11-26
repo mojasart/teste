@@ -75,19 +75,38 @@ const links = [
 }
 
 .nav__link {
+  position: relative;
+  isolation: isolate;
   padding: 10px 14px;
   font-weight: 700;
   text-decoration: none;
-  border-radius: 6px;
+  transition: color 160ms steps(2, end);
 }
 
-.nav__link:hover {
-  background: var(--byte-deep);
-}
-
-.nav__link.router-link-active {
+/* hover: um bloco branco "enche" de baixo pra cima em degraus de pixel */
+.nav__link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: var(--white);
+  border-radius: 6px;
+  box-shadow: 4px 4px 0 var(--byte-deep);
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 200ms steps(4, end);
+}
+
+.nav__link:hover,
+.nav__link:focus-visible,
+.nav__link.router-link-active {
   color: var(--byte-deep);
+}
+
+.nav__link:hover::before,
+.nav__link:focus-visible::before,
+.nav__link.router-link-active::before {
+  transform: scaleY(1);
 }
 
 .header__toggle {

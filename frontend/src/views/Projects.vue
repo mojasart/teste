@@ -50,7 +50,7 @@ function pick(slug) {
       </p>
     </div>
   </section>
-  <PixelEdge :seed="5" :rows="9" animate />
+  <PixelEdge :seed="5" :rows="14" animate />
 
   <section class="wrap list">
     <div v-if="usedCategories.length > 1" class="filters" role="group" aria-label="Filter by type">

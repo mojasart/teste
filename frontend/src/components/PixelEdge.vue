@@ -1,6 +1,6 @@
 <script setup>
 // Transição em pixels: a cor de cima se desfaz em quadradinhos sobre a de baixo.
-// Com "animate", os pixels vão descendo e "comendo" a página até parar.
+// Com "animate", os pixels vão aparecendo um a um, descendo e "comendo" a página até parar.
 const props = defineProps({
   top: { type: String, default: 'var(--byte)' },
   bottom: { type: String, default: 'var(--night)' },
@@ -14,9 +14,10 @@ let s = props.seed
 const rand = () => ((s = (s * 9301 + 49297) % 233280) / 233280)
 const cells = []
 for (let r = 0; r < props.rows; r++) {
-  const chance = 1 - (r + 0.6) / props.rows
+  const t = (r + 0.5) / props.rows
+  const chance = Math.pow(1 - t, 2.2) + 0.025
   for (let c = 0; c < cols; c++) {
-    if (rand() < chance * chance + 0.04) cells.push({ x: c * cell, y: r * cell, d: r * 110 + rand() * 260 })
+    if (rand() < chance) cells.push({ x: c * cell, y: r * cell, d: Math.round(r * 95 + rand() * 520) })
   }
 }
 </script>
@@ -51,22 +52,20 @@ for (let r = 0; r < props.rows; r++) {
   margin-top: -1px;
 }
 
+/* cada pixel "acende" de uma vez, sem deslizar */
 .pixels--animate rect + rect {
-  transform-box: fill-box;
-  transform-origin: top;
-  animation: drip 380ms steps(4, end) backwards;
+  animation: pop 1ms step-start backwards;
 }
 
-@keyframes drip {
+@keyframes pop {
   from {
     opacity: 0;
-    transform: translateY(-100%) scaleY(0.25);
   }
 }
 
 @media (max-width: 600px) {
   .pixels {
-    max-height: 72px;
+    max-height: 96px;
   }
 }
 </style>
