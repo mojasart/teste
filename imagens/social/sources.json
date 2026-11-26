@@ -1,0 +1,82 @@
+{
+  "retrievedOn": "2026-10-10",
+  "note": "All marks come directly from the official brand site or the Vatonage website. No icon was hand-drawn or taken from Simple Icons. Original files, shapes, colors, transparency, and aspect ratios are preserved. Trademark rights remain with their respective owners.",
+  "assets": [
+    {
+      "brand": "X",
+      "file": "x.svg",
+      "format": "SVG",
+      "variant": "Official white logo",
+      "sourcePage": "https://about.x.com/pt/who-we-are/brand-toolkit",
+      "downloadUrl": "https://about.x.com/content/dam/about-twitter/x/brand-toolkit/x-logo.zip",
+      "archivePath": "logo.svg",
+      "rights": "X Corp.; subject to X Brand Guidelines",
+      "viewBox": "0 0 1200 1227"
+    },
+    {
+      "brand": "Discord",
+      "file": "discord.svg",
+      "format": "SVG",
+      "variant": "Official white Clyde symbol",
+      "sourcePage": "https://discord.com/branding",
+      "downloadUrl": "https://cdn.prod.website-files.com/6257adef93867e50d84d30e2/66e3d7f4ef6498ac018f2c55_Symbol.svg",
+      "rights": "Discord Inc.; subject to Discord Brand Guidelines",
+      "viewBox": "0 0 64 48"
+    },
+    {
+      "brand": "YouTube",
+      "file": "youtube.png",
+      "format": "PNG",
+      "variant": "Official white digital icon with transparent clearspace",
+      "sourcePage": "https://brand.youtube/youtube-icon",
+      "downloadUrl": "https://www.gstatic.com/marketing-cms/78/29/3e68a1414bb28d0b7e47b44c3c91/youtube-icon.zip",
+      "archivePath": "YouTube_Icon/Digital/03 White/yt_icon_white_digital.png",
+      "rights": "YouTube/Google; subject to YouTube brand guidance",
+      "dimensions": [
+        1255,
+        1075
+      ],
+      "alphaBounds": [
+        214,
+        248,
+        1041,
+        827
+      ],
+      "note": "Official kit provides PNG, EPS, AI and PDF, but no SVG; original PNG used rather than an unofficial replacement."
+    },
+    {
+      "brand": "Vatonage",
+      "file": "vatonage.webp",
+      "format": "WebP",
+      "variant": "Original full-color phoenix logo with transparent padding",
+      "sourcePage": "https://vatonage.com/",
+      "downloadUrl": "https://vatonage.com/assets/vatonage_logo-BC4unBhM.webp",
+      "rights": "Vatonage; source website supplied no separate license",
+      "dimensions": [
+        1920,
+        1215
+      ],
+      "alphaBounds": [
+        651,
+        211,
+        1362,
+        999
+      ],
+      "note": "Real phoenix logo used by the site's application bundle. No official white or SVG version was found. Preserve original colors and proportions."
+    },
+    {
+      "brand": "Vatonage",
+      "file": "vatonage-icon.png",
+      "format": "PNG",
+      "variant": "Original square website app icon",
+      "sourcePage": "https://vatonage.com/site.webmanifest",
+      "downloadUrl": "https://vatonage.com/android-chrome-512x512.png",
+      "rights": "Vatonage; source website supplied no separate license",
+      "dimensions": [
+        512,
+        512
+      ],
+      "note": "Alternative official square icon directly supplied by the website manifest. The site's own image crops the upper flames; full logo is available as vatonage.webp."
+    }
+  ]
+}
