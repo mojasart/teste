@@ -355,6 +355,11 @@ const stats = computed(() =>
     grid-column: span 12;
   }
 
+  .grid,
+  .work__grid {
+    gap: 20px;
+  }
+
   .feature__card,
   .work__head,
   .cta__box {

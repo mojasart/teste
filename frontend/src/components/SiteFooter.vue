@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
 import { site } from '../api.js'
 import BrandMark from './BrandMark.vue'
 import PartnerBadge from './PartnerBadge.vue'
@@ -9,11 +10,15 @@ import logo from '../assets/logo-horizontal.png'
 const email = computed(() => site.settings?.contact_email)
 const discord = computed(() => site.settings?.social_discord)
 const year = new Date().getFullYear()
+// na página de contato o formulário já cumpre esse papel
+const route = useRoute()
+const showTouch = computed(() => route.path !== '/contact')
 </script>
 
 <template>
   <footer class="footer">
-    <section class="wrap touch" aria-labelledby="get-in-touch">
+    <section class="wrap touch" :aria-labelledby="showTouch ? 'get-in-touch' : undefined">
+      <template v-if="showTouch">
       <h2 id="get-in-touch" class="touch__title">Get in touch</h2>
 
       <div class="touch__grid">
@@ -49,8 +54,9 @@ const year = new Date().getFullYear()
           <RouterLink to="/projects" class="btn btn--ghost card__btn">Browse projects</RouterLink>
         </article>
       </div>
+      </template>
 
-      <div class="legal">
+      <div class="legal" :class="{ 'legal--alone': !showTouch }">
         <PartnerBadge small />
         <p class="legal__text">
           © {{ year }} PurpleByte Studios. All rights reserved.<br />
@@ -160,6 +166,11 @@ const year = new Date().getFullYear()
   color: var(--mid);
 }
 
+.legal--alone {
+  margin-top: 0;
+  border-top: 0;
+}
+
 .legal__text {
   flex: 1;
   min-width: 240px;
@@ -213,6 +224,50 @@ const year = new Date().getFullYear()
 @media (max-width: 820px) {
   .touch__grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* cartão compacto: ícone ao lado do título */
+  .card {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    column-gap: 14px;
+    row-gap: 8px;
+    padding: 20px;
+  }
+
+  .card__icon {
+    width: 40px;
+    height: 40px;
+    margin: 0;
+  }
+
+  .card h3 {
+    align-self: center;
+  }
+
+  .card p,
+  .card__btn {
+    grid-column: 1 / -1;
+  }
+
+  .card p {
+    margin-bottom: 6px;
+  }
+
+  .slab {
+    min-height: 250px;
+  }
+
+  .slab__nav {
+    max-width: 58%;
+    gap: 10px 20px;
+  }
+
+  .slab__mark {
+    width: 170px;
+    right: -46px;
+    bottom: -56px;
   }
 }
 </style>

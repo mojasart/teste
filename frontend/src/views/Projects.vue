@@ -173,5 +173,10 @@ function pick(slug) {
   .span-4 {
     grid-column: span 12;
   }
+
+  .grid,
+  .work__grid {
+    gap: 20px;
+  }
 }
 </style>

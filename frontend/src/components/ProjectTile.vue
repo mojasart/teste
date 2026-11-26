@@ -77,4 +77,38 @@ defineProps({
   color: var(--mid);
   font-size: var(--step--1);
 }
+
+/* celular: arte ao lado do texto, em vez de em cima */
+@media (max-width: 600px) {
+  .tile,
+  .tile--big {
+    grid-template-columns: 46% minmax(0, 1fr);
+    align-items: center;
+    gap: 14px;
+  }
+
+  .tile__media {
+    border-radius: 6px;
+  }
+
+  .tile__title,
+  .tile--big .tile__title {
+    font-size: 1.12rem;
+    line-height: 1.1;
+  }
+
+  .tile__tag {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-size: 0.82rem;
+    line-height: 1.35;
+  }
+
+  .tile:hover .tile__media,
+  .tile:focus-visible .tile__media {
+    transform: none;
+  }
+}
 </style>

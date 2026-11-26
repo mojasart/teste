@@ -92,6 +92,10 @@ body.night .field small {
   border-radius: 999px;
 }
 
+html.drawer-open {
+  overflow: hidden;
+}
+
 img {
   max-width: 100%;
   display: block;
