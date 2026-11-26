@@ -8,14 +8,15 @@ INSERT IGNORE INTO categories (slug, name, sort_order) VALUES
   ('skin',    'Skin Pack', 4);
 
 -- Frases curtas (em inglês) são rascunhos: revise no painel.
+-- Fabricate fica como rascunho até ter uma arte 16:9 que combine; Create é o destaque.
 SET @addon = (SELECT id FROM categories WHERE slug = 'addon');
 
 INSERT IGNORE INTO addons
   (slug, title, tagline, description, category_id, cover_image, banner_image, gallery,
    accent_color, featured, published, sort_order)
 VALUES
-  ('fabricate', 'Fabricate', 'Gears, machines and plenty of creativity.', '', @addon, '/media/fabricate-cover.webp', '/media/fabricate-banner.webp', JSON_ARRAY(), '#F5B82E', 1, 1, 1),
-  ('create', 'Create: Bedrock Edition', 'Gears, conveyors and machines to automate everything.', '', @addon, '/media/addons/create.webp', '/media/addons/create.webp', JSON_ARRAY(), '#E8B43A', 0, 1, 2),
+  ('fabricate', 'Fabricate', 'Gears, machines and plenty of creativity.', '', @addon, '/media/fabricate-cover.webp', '/media/fabricate-banner.webp', JSON_ARRAY(), '#F5B82E', 0, 0, 1),
+  ('create', 'Create: Bedrock Edition', 'Gears, conveyors and machines to automate everything.', '', @addon, '/media/addons/create.webp', '/media/addons/create.webp', JSON_ARRAY(), '#E8B43A', 1, 1, 2),
   ('basic-machinery', 'Basic Machinery', 'Machines to process ores and generate power.', '', @addon, '/media/addons/basic-machinery.webp', '/media/addons/basic-machinery.webp', JSON_ARRAY(), '#2FA3E0', 0, 1, 3),
   ('dark-utilities', 'Dark Utilities', 'Magic pads that push, trap and speed you up.', '', @addon, '/media/addons/dark-utilities.webp', '/media/addons/dark-utilities.webp', JSON_ARRAY(), '#8E4FD6', 0, 1, 4),
   ('autosmelt', 'Autosmelt', 'Pickaxes that drop ores already smelted.', '', @addon, '/media/addons/autosmelt.webp', '/media/addons/autosmelt.webp', JSON_ARRAY(), '#F59A1B', 0, 1, 5),

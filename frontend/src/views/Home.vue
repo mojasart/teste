@@ -69,7 +69,7 @@ const stats = computed(() =>
     <section class="wrap feature" aria-label="Featured release">
       <RouterLink v-reveal :to="`/projects/${featured.slug}`" class="feature__card" :style="{ '--accent': featured.accent_color }">
         <div class="feature__media">
-          <img class="feature__img" :src="featured.banner_image || featured.cover_image" :alt="`${featured.title} key art`" />
+          <img class="feature__img" :src="featured.cover_image || featured.banner_image" :alt="`${featured.title} key art`" />
         </div>
         <div class="feature__body">
           <div class="feature__text">
@@ -210,6 +210,7 @@ const stats = computed(() =>
 
 .feature__card {
   display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
   overflow: hidden;
   border-radius: 12px;
   color: var(--hi);
@@ -226,7 +227,7 @@ const stats = computed(() =>
 }
 
 .feature__media {
-  aspect-ratio: 3 / 1;
+  aspect-ratio: 16 / 9;
   overflow: hidden;
 }
 
@@ -243,11 +244,11 @@ const stats = computed(() =>
 
 .feature__body {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px 40px;
-  padding: clamp(20px, 3vw, 32px) clamp(20px, 3.5vw, 40px);
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 28px;
+  padding: clamp(24px, 4vw, 48px);
 }
 
 .feature__text {
@@ -257,7 +258,7 @@ const stats = computed(() =>
 }
 
 .feature__title {
-  font-size: var(--step-3);
+  font-size: clamp(2.2rem, 4vw, 3.4rem);
   font-stretch: 75%;
   line-height: 1;
 }
@@ -354,6 +355,7 @@ const stats = computed(() =>
     grid-column: span 12;
   }
 
+  .feature__card,
   .work__head,
   .cta__box {
     grid-template-columns: 1fr;

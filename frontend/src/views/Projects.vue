@@ -44,12 +44,13 @@ function pick(slug) {
   <section class="top">
     <div class="wrap top__inner">
       <h1 class="top__title">Projects</h1>
-      <p v-if="!loading && !failed" class="top__lead">
-        {{ projects.length }} add-ons released on the Minecraft Marketplace.
+      <p v-if="!loading && !failed && projects.length" class="top__count">
+        <strong>{{ projects.length }}</strong>
+        <span>add-ons on the<br />Minecraft Marketplace</span>
       </p>
     </div>
   </section>
-  <PixelEdge :seed="5" />
+  <PixelEdge :seed="5" :rows="9" animate />
 
   <section class="wrap list">
     <div v-if="usedCategories.length > 1" class="filters" role="group" aria-label="Filter by type">
@@ -94,7 +95,7 @@ function pick(slug) {
   align-items: end;
   justify-content: space-between;
   gap: 16px 48px;
-  padding-block: clamp(40px, 6vw, 80px) 24px;
+  padding-block: clamp(40px, 6vw, 80px) 8px;
 }
 
 .top__title {
@@ -104,9 +105,20 @@ function pick(slug) {
   text-shadow: 0.05em 0.06em 0 var(--byte-deep);
 }
 
-.top__lead {
-  font-size: var(--step-1);
-  max-width: 34ch;
+.top__count {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.top__count strong {
+  font-size: var(--step-4);
+  font-stretch: 75%;
+  line-height: 0.9;
+  color: var(--brass);
+  text-shadow: 0.05em 0.06em 0 var(--byte-deep);
 }
 
 .list {
